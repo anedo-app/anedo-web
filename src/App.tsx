@@ -1,7 +1,12 @@
-import "./App.css";
+import "./App.scss";
 
 function App() {
-  return <h1>Anedo webapp</h1>;
+  return (
+    <div className="container">
+      <h1 className="title">Anedo app</h1>
+      <p>Ça arrive fort !</p>
+    </div>
+  );
 }
 
 export default App;

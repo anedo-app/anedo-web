@@ -1,0 +1,14 @@
+
+.container {
+  display: flex;
+  flex-direction: column;
+  place-content: center center;
+
+  height: 100%;
+
+  text-align: center;
+}
+
+.title {
+  @include archivo(800)
+}

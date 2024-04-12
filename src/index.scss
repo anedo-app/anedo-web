@@ -1,0 +1,12 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  @include roboto(400, normal);
+
+  height: 100vh;
+}
+
