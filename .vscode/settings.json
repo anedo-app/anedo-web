@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": false, // to prevent external formatter from running
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "eslint.validate": ["javascript"], // use project eslint as formatter
+}
