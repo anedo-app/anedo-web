@@ -9,7 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && npx stylelint '**/*.module.scss'",
     "lint:fix": "eslint . --ext ts,tsx --fix --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "icons": "node ./scripts/fetch-icons.js"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Svg icons from figma
+src/Icons/*.svg
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
