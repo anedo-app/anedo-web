@@ -1,4 +1,5 @@
 import path from "path";
+import colors from "./src/styles/colors";
 import react from "@vitejs/plugin-react-swc";
 import {defineConfig} from "vite";
 
@@ -10,8 +11,10 @@ export default defineConfig({
       scss: {
         additionalData: `
           @import "normalize.css";
-          @import "./src/styles/colors.scss";
           @import "./src/styles/fonts.scss";
+          ${Object.entries(colors)
+            .map(([key, value]) => `$${key}: ${value};`)
+            .join("\n")}
         `,
       },
     },
