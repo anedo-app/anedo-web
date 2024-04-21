@@ -11,12 +11,16 @@ const icons = fs
 fs.writeFileSync("./src/Icons/index.tsx", "");
 
 const formatSvg = (svgContent) => {
-  const modifiedSvgContent = svgContent
-    .replace(/fill="[^"]*"/g, "fill={color}")
-    .replace(/stroke="[^"]*"/g, "")
-    .replace(/width="[^"]*"/g, "width={size}")
-    .replace(/height="[^"]*"/g, "height={size}");
-  return modifiedSvgContent;
+  const fillAttributeRegex = /fill="[^"]*"/g,
+    strokeAttributeRegex = /stroke="[^"]*"/g,
+    widthAttributeRegex = /width="[^"]*"/g,
+    heightAttributeRegex = /height="[^"]*"/g;
+
+  return svgContent
+    .replace(fillAttributeRegex, "fill={color}")
+    .replace(strokeAttributeRegex, "")
+    .replace(widthAttributeRegex, "width={size}")
+    .replace(heightAttributeRegex, "height={size}");
 };
 
 const kebabToPascal = (svgName) => {
