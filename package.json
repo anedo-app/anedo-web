@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --ext ts,tsx --fix --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prepare": "husky",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "icons": "node ./scripts/fetch-icons.js"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
