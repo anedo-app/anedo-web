@@ -1,0 +1,55 @@
+@mixin text-mega-title {
+  @include archivo(700);
+
+  font-size: 3rem;
+}
+
+@mixin text-big-title {
+  @include archivo(700);
+
+  font-size: 2.5rem;
+}
+
+@mixin text-title {
+  @include archivo(700);
+
+  font-size: 2rem;
+}
+
+@mixin text-small-title {
+  @include archivo(700);
+
+  font-size: 1.5rem;
+}
+
+@mixin text-call-out {
+  @include roboto(medium, normal);
+
+  font-size: 1.125rem;
+}
+
+@mixin text-body($style) {
+  @include roboto(400, $style);
+
+  font-size: 1rem;
+}
+
+@mixin text-link() {
+  @include roboto(400, normal);
+  
+  font-size: 1rem;
+  color: $purple-125;
+}
+
+@mixin text-tag($style) {
+  @include roboto(400, $style);
+
+  font-size: 0.875rem;
+}
+
+@mixin text-small-stuff($style) {
+  @include roboto(400, $style);
+
+  font-size: 0.75rem;
+}
+

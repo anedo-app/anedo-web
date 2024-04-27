@@ -12,6 +12,7 @@ export default defineConfig({
         additionalData: `
           @import "normalize.css";
           @import "./src/styles/fonts.scss";
+          @import "./src/styles/texts.scss";
           ${Object.entries(colors)
             .map(([key, value]) => `$${key}: ${value};`)
             .join("\n")}
