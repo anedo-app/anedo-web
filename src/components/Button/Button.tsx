@@ -10,19 +10,37 @@ const Button: React.FC<ButtonProps> = ({
   href,
   target,
   disabled,
+  variant = "primary",
+  size = "normal",
+  icon: Icon,
 }) => {
   const {s} = useStyles();
+  const [keyDown, setKeyDown] = React.useState(false);
 
   const classes = s([
     className,
     style.buttonContainer,
+    style[size],
+    style[variant],
     {
       [style.disabled]: disabled,
+      [style.keyDown]: keyDown || disabled,
     },
   ]);
 
   const content = () => {
-    return <span className={style.content}>{children}</span>;
+    return (
+      <>
+        {Icon && (
+          <Icon
+            size={size === "small" ? 16 : 24}
+            color="currentColor"
+            role={ButtonRolesEnum.ICON}
+          />
+        )}
+        <span className={style.content}>{children}</span>
+      </>
+    );
   };
 
   if (href)
@@ -37,12 +55,27 @@ const Button: React.FC<ButtonProps> = ({
       </a>
     );
 
-  const canClick = () => !disabled;
-  const onUserClick = () => canClick() && onClick && onClick();
+  const canClick = () => !disabled || !onClick;
+
+  const onUserClick = () => {
+    if (!canClick() || !onClick) return;
+    onClick();
+  };
+
+  const onKey = (e: React.KeyboardEvent, type: "down" | "up") => {
+    if (e.key === " " || e.key === "Enter") {
+      if (type === "down") setKeyDown(true);
+      else setKeyDown(false);
+    }
+  };
 
   return (
     <button
       onClick={onUserClick}
+      onMouseDown={() => setKeyDown(true)}
+      onMouseUp={() => setKeyDown(false)}
+      onKeyDown={(e) => onKey(e, "down")}
+      onKeyUp={(e) => onKey(e, "up")}
       className={classes}
       disabled={disabled}
       role={ButtonRolesEnum.BUTTON}
