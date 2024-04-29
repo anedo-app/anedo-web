@@ -4,6 +4,7 @@ import {IIconProps} from "@/Icons/icons.type";
 export enum ButtonRolesEnum {
   BUTTON = "button",
   LINK = "link",
+  ICON = "iconElement",
 }
 
 export enum ButtonVariantEnum {

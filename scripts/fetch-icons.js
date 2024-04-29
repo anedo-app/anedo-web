@@ -17,10 +17,11 @@ const formatSvg = (svgContent) => {
     heightAttributeRegex = /height="[^"]*"/g;
 
   return svgContent
-    .replace(fillAttributeRegex, "fill={color}")
+    .replace(fillAttributeRegex, "fill={props.color}")
     .replace(strokeAttributeRegex, "")
-    .replace(widthAttributeRegex, "width={size}")
-    .replace(heightAttributeRegex, "height={size}");
+    .replace(widthAttributeRegex, "width={props.size}")
+    .replace(heightAttributeRegex, "height={props.size}")
+    .replace(/<svg/, "<svg {...props}");
 };
 
 const kebabToPascal = (svgName) => {
@@ -38,7 +39,7 @@ const formattedSvgs = icons.map((file) => {
   const svgContent = fs.readFileSync(path.join(iconsFolder, file), "utf-8");
   const modifiedSvgContent = formatSvg(svgContent);
   return `
-    const ${kebabToPascal(file.replace(".svg", ""))}Icon:React.FC<IIconProps> = ({size = 24, color}) => (${modifiedSvgContent})
+    const ${kebabToPascal(file.replace(".svg", ""))}Icon:React.FC<IIconProps> = (props) => (${modifiedSvgContent})
   `;
 });
 

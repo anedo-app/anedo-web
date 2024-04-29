@@ -32,7 +32,11 @@ const Button: React.FC<ButtonProps> = ({
     return (
       <>
         {Icon && (
-          <Icon size={size === "small" ? 16 : 24} color="currentColor" />
+          <Icon
+            size={size === "small" ? 16 : 24}
+            color="currentColor"
+            role={ButtonRolesEnum.ICON}
+          />
         )}
         <span className={style.content}>{children}</span>
       </>
