@@ -1,9 +1,7 @@
 import React from "react";
+import {IIconProps} from "./icons.type";
 
-const AlertCircleIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const AlertCircleIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -26,10 +24,7 @@ const AlertCircleIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const ArrowLeftIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const ArrowLeftIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -44,10 +39,7 @@ const ArrowLeftIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const ArrowRightIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const ArrowRightIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -62,10 +54,7 @@ const ArrowRightIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const BookOpenIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const BookOpenIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -80,10 +69,7 @@ const BookOpenIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const CheckmarkIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const CheckmarkIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -98,10 +84,7 @@ const CheckmarkIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const CloseIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const CloseIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -116,10 +99,7 @@ const CloseIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const CopyIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const CopyIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -136,10 +116,7 @@ const CopyIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const EditIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const EditIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -154,10 +131,7 @@ const EditIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const EyeIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const EyeIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -180,10 +154,7 @@ const EyeIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const FlagIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const FlagIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -198,10 +169,7 @@ const FlagIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const ForbidenIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const ForbidenIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -216,10 +184,7 @@ const ForbidenIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const GoogleLogoIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const GoogleLogoIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -234,10 +199,7 @@ const GoogleLogoIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const HomeIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const HomeIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -252,10 +214,7 @@ const HomeIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const InfoCircleIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const InfoCircleIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -272,10 +231,7 @@ const InfoCircleIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const LoaderIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const LoaderIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -290,10 +246,7 @@ const LoaderIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const LogOutIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const LogOutIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -308,10 +261,7 @@ const LogOutIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const MoreHorizontalIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const MoreHorizontalIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -328,10 +278,7 @@ const MoreHorizontalIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const PlayCircleIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const PlayCircleIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -348,10 +295,7 @@ const PlayCircleIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const QuestionMarkIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const QuestionMarkIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -368,10 +312,7 @@ const QuestionMarkIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const RewindLeftIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const RewindLeftIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -386,10 +327,7 @@ const RewindLeftIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const SaveIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const SaveIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -404,10 +342,7 @@ const SaveIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const SettingsIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const SettingsIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -426,10 +361,7 @@ const SettingsIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const StarIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const StarIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -444,10 +376,7 @@ const StarIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const TrashIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const TrashIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}
@@ -466,10 +395,7 @@ const TrashIcon: React.FC<{size?: number; color?: string}> = ({
   </svg>
 );
 
-const UserIcon: React.FC<{size?: number; color?: string}> = ({
-  size = 24,
-  color,
-}) => (
+const UserIcon: React.FC<IIconProps> = ({size = 24, color}) => (
   <svg
     width={size}
     height={size}

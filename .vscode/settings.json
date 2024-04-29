@@ -3,5 +3,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
-  "eslint.validate": ["javascript"], // use project eslint as formatter
+  "eslint.validate": ["javascript", "scss", "sass", "css"], // use project eslint as formatter
 }
