@@ -13,9 +13,3 @@ h6,
 p {
   margin: 0;
 }
-
-#root {
-  @include roboto(400, normal);
-
-  height: 100dvh;
-}

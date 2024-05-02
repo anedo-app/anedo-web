@@ -1,0 +1,79 @@
+.tileContainer {
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+
+  box-sizing: border-box;
+  padding: 24px;
+
+  color: $black-100;
+  text-decoration: none;
+
+  background-color: $cream-100;
+  border: solid 2px;
+  border-color: $black-100;
+  border-bottom-width: 6px;
+  border-radius: 24px;
+
+  transition-duration: $transition-duration;
+  transition-property: color, background-color, border-color;
+
+  &:focus-visible {
+    outline: solid 4px $purple-125;
+  }
+
+  &:hover {
+    color: $black-85;
+    background-color: $cream-85;
+    border-color: $black-85;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+
+  h3 {
+    @include text-small-title;
+  }
+
+  p {
+    @include text-body(400);
+  }
+}
+
+.keyDown {
+  margin-top: 4px;
+  border-bottom-width: 2px;
+}
+
+.disabled {
+  cursor: not-allowed;
+
+  position: relative;
+
+  overflow: hidden;
+
+  width: max-content;
+
+  background: repeating-linear-gradient(
+    -115deg,
+    $grey-100,
+    $grey-100 3px,
+    $black-25 3px,
+    $black-25 6px
+  );
+  background-color: $grey-100;
+  border-color: $black-100;
+
+  &:hover {
+    color: $black-100;
+    background-color: $grey-100;
+    border-color: $black-100;
+  }
+}
