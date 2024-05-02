@@ -13,7 +13,14 @@ const description = "Description";
 
 beforeEach<LocalTestContext>((context) => {
   context.wrapper = (props) =>
-    render(<Tile title={title} description={description} {...props} />);
+    render(
+      <Tile
+        title={title}
+        onClick={() => props?.onClick}
+        description={description}
+        {...props}
+      />,
+    );
 });
 
 describe("Tile", () => {
