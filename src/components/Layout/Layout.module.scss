@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
 
-  height: 100svh;
+  height: 100%;
 
   background-color: $cream-100;
 }
@@ -16,7 +16,7 @@
 
   width: 100%;
   max-width: 720px;
-  min-height: 100vh;
+  height: 100%;
 }
 
 .version {
