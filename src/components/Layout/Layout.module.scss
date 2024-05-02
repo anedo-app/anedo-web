@@ -1,0 +1,33 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 100svh;
+
+  background-color: $cream-100;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 720px;
+  min-height: 100vh;
+}
+
+.version {
+  @include text-small-stuff(400);
+
+  pointer-events: none;
+
+  position: fixed;
+  bottom: 0;
+
+  padding: 4px 8px;
+
+  color: $black-25
+}

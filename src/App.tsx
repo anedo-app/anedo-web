@@ -1,15 +1,38 @@
-import "./App.scss";
+import React from "react";
+import Home from "./pages/Home";
 import useEnv from "./hooks/useEnv";
+import Layout from "@/components/Layout";
+import WaitingScreen from "./pages/WaitingScreen";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
-function App() {
-  const {appVersion} = useEnv();
+const HiddenRoutes = () => {
+  const {isDev} = useEnv();
+  if (isDev)
+    return (
+      <>
+        <Route index element={<Home />} />
+        <Route path="/waiting" element={<WaitingScreen />} />
+      </>
+    );
+  else
+    return (
+      <>
+        <Route index element={<WaitingScreen />} />
+        <Route path="/*" element={<WaitingScreen />} />
+      </>
+    );
+};
+
+const App: React.FC = () => {
   return (
-    <div className="container">
-      <h1 className="title">Anedo app</h1>
-      <p>Ça arrive fort !</p>
-      <p className="version">{appVersion}</p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {HiddenRoutes()}
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
