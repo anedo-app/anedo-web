@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import style from "./Button.module.scss";
 import useStyles from "@/hooks/useStyles";
 import {ButtonProps, ButtonRolesEnum} from "./Button.types";
@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({
   icon: Icon,
 }) => {
   const {s} = useStyles();
-  const [keyDown, setKeyDown] = React.useState(false);
+  const [keyDown, setKeyDown] = useState(false);
 
   const classes = s([
     className,
