@@ -12,5 +12,6 @@ export interface InputTextProps extends React.HTMLAttributes<HTMLInputElement> {
   placeholder?: string;
   disabled?: boolean;
   error?: boolean;
+  required?: boolean;
   className?: string;
 }

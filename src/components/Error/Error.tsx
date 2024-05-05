@@ -15,7 +15,7 @@ const Error: React.FC<ErrorProps> = ({className, error}) => {
       <span className={classes} role={ErrorRolesEnum.ERROR}>
         <AlertCircleIcon
           size={16}
-          color={colors["orange-100"]}
+          color={colors["orange-125"]}
           className={style.icon}
         />
         <p>{error}</p>

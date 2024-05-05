@@ -18,12 +18,6 @@ describe("Label", () => {
     expect(Label.getByText(value)).toBeDefined();
   });
 
-  test<LocalTestContext>("should show error state", ({wrapper}) => {
-    const Label = wrapper({error: true});
-    expect(Label.getByText(value)).toBeDefined();
-    expect(Label.getByRole(LabelRolesEnum.LABEL).className).toContain("error");
-  });
-
   test<LocalTestContext>("should show required state", ({wrapper}) => {
     const Label = wrapper({required: true});
     expect(Label.getByText(value)).toBeDefined();

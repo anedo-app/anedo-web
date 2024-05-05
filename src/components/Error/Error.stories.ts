@@ -17,18 +17,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Normal: Story = {
-  args: {},
-};
-
-export const Required: Story = {
-  args: {
-    required: true,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-  },
-};
+export const Normal: Story = {};

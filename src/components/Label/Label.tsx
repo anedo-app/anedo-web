@@ -6,7 +6,6 @@ import {LabelProps, LabelRolesEnum} from "./Label.types";
 const Label: React.FC<LabelProps> = ({
   className,
   disabled,
-  error,
   id,
   label,
   required,
@@ -18,7 +17,6 @@ const Label: React.FC<LabelProps> = ({
     style.container,
     {
       [style.disabled]: disabled,
-      [style.error]: error,
     },
   ]);
 
