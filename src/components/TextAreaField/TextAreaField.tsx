@@ -1,12 +1,15 @@
 import Error from "../Error";
 import Label from "../Label";
 import React, {useId} from "react";
-import InputText from "../InputText";
 import useStyles from "@/hooks/useStyles";
-import style from "./TextField.module.scss";
-import {TextFieldProps, TextFieldRolesEnum} from "./TextField.types";
+import TextArea from "../TextArea/TextArea";
+import style from "./TextAreaField.module.scss";
+import {
+  TextAreaFieldProps,
+  TextAreaFieldRolesEnum,
+} from "./TextAreaField.types";
 
-const TextField: React.FC<TextFieldProps> = ({
+const TextAreaField: React.FC<TextAreaFieldProps> = ({
   className,
   value,
   error,
@@ -20,9 +23,9 @@ const TextField: React.FC<TextFieldProps> = ({
   const classes = s([className, style.container]);
 
   return (
-    <div className={classes} role={TextFieldRolesEnum.TEXT_FIELD}>
+    <div className={classes} role={TextAreaFieldRolesEnum.TEXT_AREA_FIELD}>
       <Label id={id} label={label} error={!!error} required={required} />
-      <InputText
+      <TextArea
         id={id}
         value={value}
         error={!!error}
@@ -34,4 +37,4 @@ const TextField: React.FC<TextFieldProps> = ({
   );
 };
 
-export default TextField;
+export default TextAreaField;
