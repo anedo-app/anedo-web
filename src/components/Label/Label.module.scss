@@ -1,0 +1,10 @@
+.container {
+  @include text-body(400);
+
+  box-sizing: border-box;
+  color: $black-100;
+}
+
+.disabled {
+  cursor: not-allowed;
+}

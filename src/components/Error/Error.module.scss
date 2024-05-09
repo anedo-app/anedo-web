@@ -1,0 +1,16 @@
+.container {
+  @include text-small-stuff(400);
+
+  display: flex;
+  gap: 4px;
+  box-sizing: border-box;
+  color: $orange-125;
+
+  p {
+    padding-top: 2px;
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+}
