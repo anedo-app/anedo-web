@@ -14,14 +14,19 @@ const formatSvg = (svgContent) => {
   const fillAttributeRegex = /fill="[^"]*"/g,
     strokeAttributeRegex = /stroke="[^"]*"/g,
     widthAttributeRegex = /width="[^"]*"/g,
-    heightAttributeRegex = /height="[^"]*"/g;
+    heightAttributeRegex = /height="[^"]*"/g,
+    kebabCaseAttributesRegex = /(\w+)-(\w+)/g;
 
   return svgContent
     .replace(fillAttributeRegex, "fill={props.color}")
     .replace(strokeAttributeRegex, "")
     .replace(widthAttributeRegex, "width={props.size}")
     .replace(heightAttributeRegex, "height={props.size}")
-    .replace(/<svg/, "<svg {...props}");
+    .replace(/<svg/, "<svg {...props}")
+    .replace(
+      kebabCaseAttributesRegex,
+      (_, g1, g2) => `${g1}${g2.charAt(0).toUpperCase()}${g2.slice(1)}`, // thanks to copilot
+    );
 };
 
 const kebabToPascal = (svgName) => {
