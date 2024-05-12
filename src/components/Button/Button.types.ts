@@ -17,7 +17,8 @@ export enum ButtonSizeEnum {
   SMALL = "small",
 }
 
-export interface ButtonProps {
+export interface ButtonProps
+  extends React.HTMLAttributes<HTMLButtonElement & HTMLAnchorElement> {
   className?: string;
   children: React.ReactNode;
   onClick?: () => void;
@@ -27,4 +28,5 @@ export interface ButtonProps {
   variant?: "primary" | "success" | "danger";
   size?: "normal" | "small";
   icon?: React.FC<IIconProps>;
+  pushed?: boolean;
 }
