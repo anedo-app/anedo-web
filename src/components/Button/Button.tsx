@@ -1,6 +1,6 @@
-import React, {useState} from "react";
 import style from "./Button.module.scss";
 import useStyles from "@/hooks/useStyles";
+import React, {useEffect, useState} from "react";
 import {ButtonProps, ButtonRolesEnum} from "./Button.types";
 
 const Button: React.FC<ButtonProps> = ({
@@ -13,6 +13,8 @@ const Button: React.FC<ButtonProps> = ({
   variant = "primary",
   size = "normal",
   icon: Icon,
+  pushed,
+  ...props
 }) => {
   const {s} = useStyles();
   const [keyDown, setKeyDown] = useState(false);
@@ -24,9 +26,20 @@ const Button: React.FC<ButtonProps> = ({
     style[variant],
     {
       [style.disabled]: disabled,
-      [style.keyDown]: keyDown || disabled,
+      [style.keyDown]: keyDown || disabled || pushed,
     },
   ]);
+
+  useEffect(() => {
+    document
+      .querySelector("body")
+      ?.addEventListener("mouseup", () => setKeyDown(false));
+    return () => {
+      document
+        .querySelector("body")
+        ?.removeEventListener("mouseup", () => setKeyDown(false));
+    };
+  }, []);
 
   const content = () => {
     return (
@@ -50,6 +63,7 @@ const Button: React.FC<ButtonProps> = ({
         href={href}
         target={target}
         role={ButtonRolesEnum.LINK}
+        {...props}
       >
         {content()}
       </a>
@@ -58,7 +72,7 @@ const Button: React.FC<ButtonProps> = ({
   const canClick = () => !disabled || !onClick;
 
   const onUserClick = () => {
-    if (!canClick() || !onClick) return;
+    if (!canClick() || !onClick || pushed) return;
     onClick();
   };
 
@@ -79,6 +93,7 @@ const Button: React.FC<ButtonProps> = ({
       className={classes}
       disabled={disabled}
       role={ButtonRolesEnum.BUTTON}
+      {...props}
     >
       {content()}
     </button>
