@@ -3,10 +3,14 @@
 
   display: flex;
   gap: 4px;
+
   box-sizing: border-box;
+  width: 100%;
+
   color: $orange-125;
 
   p {
+    width: 100%;
     padding-top: 2px;
   }
 }
