@@ -51,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
             role={ButtonRolesEnum.ICON}
           />
         )}
-        <span className={style.content}>{children}</span>
+        {children && <span className={style.content}>{children}</span>}
       </>
     );
   };

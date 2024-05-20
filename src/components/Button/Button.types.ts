@@ -20,7 +20,7 @@ export enum ButtonSizeEnum {
 export interface ButtonProps
   extends React.HTMLAttributes<HTMLButtonElement & HTMLAnchorElement> {
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onClick?: () => void;
   href?: string;
   target?: string;

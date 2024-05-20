@@ -7,11 +7,13 @@ export enum InputTextRolesEnum {
   DESCRIPTION = "descriptionElement",
 }
 
-export interface InputTextProps extends React.HTMLAttributes<HTMLInputElement> {
+export interface InputTextProps
+  extends React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > {
   value: string | undefined;
   placeholder?: string;
-  disabled?: boolean;
   error?: boolean;
-  required?: boolean;
   className?: string;
 }
