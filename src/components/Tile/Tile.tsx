@@ -9,6 +9,8 @@ const Tile: React.FC<TileProps> = ({
   disabled,
   description,
   title,
+  children,
+  small,
   icon: Icon,
 }) => {
   const {s} = useStyles();
@@ -19,6 +21,7 @@ const Tile: React.FC<TileProps> = ({
     style.tileContainer,
     {
       [style.disabled]: disabled,
+      [style.small]: small,
       [style.keyDown]: keyDown || disabled,
     },
   ]);
@@ -49,10 +52,13 @@ const Tile: React.FC<TileProps> = ({
       {Icon && (
         <Icon size={24} color="currentColor" role={TileRolesEnum.ICON} />
       )}
-      <div className={style.content}>
-        {title && <h3>{title}</h3>}
-        {description && <p>{description}</p>}
-      </div>
+      {children}
+      {(title || description) && (
+        <div className={style.content}>
+          {title && <h3>{title}</h3>}
+          {description && <p>{description}</p>}
+        </div>
+      )}
     </button>
   );
 };

@@ -1,4 +1,5 @@
 import Tile from "./Tile";
+import Avatar from "../Avatar";
 import {EyeIcon} from "@/Icons";
 import {fn} from "@storybook/test";
 import type {Meta, StoryObj} from "@storybook/react";
@@ -47,5 +48,22 @@ export const NoIcon: Story = {
     icon: undefined,
     title: "I am a tile title",
     description: "And I am the tile content",
+  },
+};
+
+export const WithChild: Story = {
+  args: {
+    icon: undefined,
+    children: <Avatar src="" />,
+    description: "I am a user name ",
+  },
+};
+
+export const SmallWithChild: Story = {
+  args: {
+    small: true,
+    icon: undefined,
+    children: <Avatar src="" />,
+    description: "I am a user name ",
   },
 };
