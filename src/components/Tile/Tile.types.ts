@@ -9,10 +9,12 @@ export enum TileRolesEnum {
 }
 
 export interface TileProps {
-  className?: string;
   title?: string;
   description?: string;
-  onClick: () => void;
-  disabled?: boolean;
   icon?: React.FC<IIconProps>;
+  children?: React.ReactNode;
+  disabled?: boolean;
+  small?: boolean;
+  onClick: () => void;
+  className?: string;
 }
