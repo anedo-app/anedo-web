@@ -13,6 +13,8 @@ const EmailField: React.FC<EmailFieldProps> = ({
   label,
   required,
   onError,
+  onValidation,
+  noError,
   disabled,
   ...props
 }) => {
@@ -24,13 +26,16 @@ const EmailField: React.FC<EmailFieldProps> = ({
   const [internalError, setInternalError] = useState<string | undefined>();
 
   const emailError = () => {
-    if (!value) return "";
+    if (!value || noError) return "";
     if (!value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
       return "This is not a valid email";
   };
 
   useEffect(() => {
     const e = emailError();
+
+    onValidation?.(!e);
+
     if (e) setInternalError(e);
     else setInternalError(undefined);
 

@@ -25,8 +25,10 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
   error: externalError,
   label,
   required,
-  onError,
   disabled,
+  noError,
+  onError,
+  onValidation,
   ...props
 }) => {
   const {s} = useStyles();
@@ -39,7 +41,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
   const [internalError, setInternalError] = useState<string | undefined>();
 
   const passwordError = () => {
-    if (!value) return "";
+    if (!value || noError) return "";
     if (value.length < 8) return PasswordFieldErrorEnum.SHORT;
     if (!/[A-Z]/.test(value)) return PasswordFieldErrorEnum.UPPERCASE;
     if (!/[a-z]/.test(value)) return PasswordFieldErrorEnum.LOWERCASE;
@@ -48,6 +50,9 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
 
   useEffect(() => {
     const e = passwordError();
+
+    onValidation?.(!e);
+
     if (e) setInternalError(PasswordErrorsWording[e]);
     else setInternalError(undefined);
 
