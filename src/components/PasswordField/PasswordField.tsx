@@ -82,6 +82,8 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
           required={required}
           type={showPassword ? "text" : "password"}
           disabled={disabled}
+          datatype="password"
+          role="password"
           {...props}
         />
         {!disabled && (

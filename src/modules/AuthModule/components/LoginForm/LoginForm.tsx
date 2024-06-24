@@ -17,6 +17,7 @@ const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState(false);
 
   const {isFieldEmpty, hasEmptyFields, setShowEmptyFields} = useFormEmptyFields(
     {
@@ -30,9 +31,12 @@ const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
 
     if (hasEmptyFields) return;
     try {
+      setLoading(true);
       await login(email, password);
+      setLoading(false);
     } catch (e) {
       if (e instanceof FirebaseError) setError(getErrorMessage(e));
+      setLoading(false);
     }
   };
 
@@ -48,7 +52,7 @@ const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
       />
       <PasswordField
         value={password}
-        label="Ton mot de passe"
+        label="Mot de passe"
         placeholder="************"
         onChange={(e) => setPassword(e.target.value)}
         error={
@@ -57,7 +61,9 @@ const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
         noError
       />
 
-      <Button onClick={onSubmit}>M’identifier</Button>
+      <Button onClick={onSubmit} loading={loading}>
+        M’identifier
+      </Button>
 
       <Error error={error} />
 

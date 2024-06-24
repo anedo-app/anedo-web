@@ -1,6 +1,6 @@
+import React from "react";
 import style from "./Button.module.scss";
 import useStyles from "@/hooks/useStyles";
-import React, {useEffect, useState} from "react";
 import {ButtonProps, ButtonRolesEnum} from "./Button.types";
 
 const Button: React.FC<ButtonProps> = ({
@@ -13,11 +13,11 @@ const Button: React.FC<ButtonProps> = ({
   variant = "primary",
   size = "normal",
   icon: Icon,
+  loading,
   pushed,
   ...props
 }) => {
   const {s} = useStyles();
-  const [keyDown, setKeyDown] = useState(false);
 
   const classes = s([
     className,
@@ -26,30 +26,24 @@ const Button: React.FC<ButtonProps> = ({
     style[variant],
     {
       [style.disabled]: disabled,
-      [style.keyDown]: keyDown || disabled || pushed,
+      [style.loading]: loading,
+      [style.pushed]: disabled || pushed,
     },
   ]);
-
-  useEffect(() => {
-    document
-      .querySelector("body")
-      ?.addEventListener("mouseup", () => setKeyDown(false));
-    return () => {
-      document
-        .querySelector("body")
-        ?.removeEventListener("mouseup", () => setKeyDown(false));
-    };
-  }, []);
 
   const content = () => {
     return (
       <>
-        {Icon && (
-          <Icon
-            size={size === "small" ? 16 : 24}
-            color="currentColor"
-            role={ButtonRolesEnum.ICON}
-          />
+        {loading ? (
+          <div className={style.loader} />
+        ) : (
+          Icon && (
+            <Icon
+              size={size === "small" ? 16 : 24}
+              color="currentColor"
+              role={ButtonRolesEnum.ICON}
+            />
+          )
         )}
         {children && <span className={style.content}>{children}</span>}
       </>
@@ -72,24 +66,13 @@ const Button: React.FC<ButtonProps> = ({
   const canClick = () => !disabled || !onClick;
 
   const onUserClick = () => {
-    if (!canClick() || !onClick || pushed) return;
+    if (!canClick() || !onClick || pushed || disabled || loading) return;
     onClick();
-  };
-
-  const onKey = (e: React.KeyboardEvent, type: "down" | "up") => {
-    if (e.key === " " || e.key === "Enter") {
-      if (type === "down") setKeyDown(true);
-      else setKeyDown(false);
-    }
   };
 
   return (
     <button
       onClick={onUserClick}
-      onMouseDown={() => setKeyDown(true)}
-      onMouseUp={() => setKeyDown(false)}
-      onKeyDown={(e) => onKey(e, "down")}
-      onKeyUp={(e) => onKey(e, "up")}
       className={classes}
       disabled={disabled}
       role={ButtonRolesEnum.BUTTON}

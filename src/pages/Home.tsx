@@ -9,7 +9,9 @@ const Home: React.FC = () => {
   return (
     <div className="container">
       <h1 className="title">Home</h1>
-      <Button onClick={logout}>Clean cookies</Button>
+      <Button size="small" onClick={logout}>
+        Se déconnecter
+      </Button>
     </div>
   );
 };

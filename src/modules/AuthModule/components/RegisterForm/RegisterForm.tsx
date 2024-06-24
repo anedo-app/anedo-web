@@ -23,6 +23,7 @@ const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
 
   const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState(false);
 
   const [differentPasswords, setDifferentPasswords] = useState(false);
 
@@ -46,9 +47,12 @@ const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
 
     if (!isFormValid) return;
     try {
+      setLoading(true);
       await register(email, password, name);
+      setLoading(false);
     } catch (e) {
       if (e instanceof FirebaseError) setError(getErrorMessage(e));
+      setLoading(false);
     }
   };
 
@@ -97,7 +101,9 @@ const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
               : undefined
         }
       />
-      <Button onClick={onSubmit}>M’inscrire</Button>
+      <Button onClick={onSubmit} loading={loading}>
+        M’inscrire
+      </Button>
 
       <Error error={error} />
 

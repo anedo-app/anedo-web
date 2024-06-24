@@ -11,12 +11,16 @@ import {FirebaseError} from "firebase/app";
 const AuthModule: React.FC = () => {
   const {loginWithGoogle} = useUser();
   const [authState, setAuthState] = useState<"login" | "register">("login");
+  const [loading, setLoading] = useState(false);
 
   const googleLogin = async () => {
     try {
+      setLoading(true);
       await loginWithGoogle();
+      setLoading(false);
     } catch (e) {
       if (e instanceof FirebaseError) console.error(e.code, e.message);
+      setLoading(false);
     }
   };
 
@@ -40,6 +44,7 @@ const AuthModule: React.FC = () => {
         icon={GoogleLogoIcon}
         className={style.google}
         onClick={googleLogin}
+        loading={loading}
       >
         Continuer avec Google
       </Button>

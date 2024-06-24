@@ -22,6 +22,16 @@
   &:focus-visible {
     outline: solid 4px $purple-125;
   }
+
+  &.pushed,
+  &:active:not(&.disabled, &.loading) {
+    margin-top: 4px;
+    border-bottom-width: 2px;
+
+    &.small {
+      margin-top: 2px;
+    }
+  }
 }
 
 .normal {
@@ -34,15 +44,6 @@
 
   padding: 4px 8px;
   border-bottom-width: 4px;
-}
-
-.keyDown {
-  margin-top: 4px;
-  border-bottom-width: 2px;
-
-  &.small {
-    margin-top: 2px;
-  }
 }
 
 .primary {
@@ -83,13 +84,6 @@
 
 .disabled {
   cursor: not-allowed;
-
-  position: relative;
-
-  overflow: hidden;
-
-  width: max-content;
-
   background: repeating-linear-gradient(
     -115deg,
     $grey-100,
@@ -104,5 +98,38 @@
     color: $black-100;
     background-color: $grey-100;
     border-color: $black-100;
+  }
+}
+
+.loading {
+  cursor: wait;
+  background: $grey-100;
+  background-color: $grey-100;
+  border-color: $black-100;
+
+  &:hover {
+    color: $black-100;
+    background-color: $grey-100;
+    border-color: $black-100;
+  }
+}
+
+.loader {
+  width: 16px;
+  height: 16px;
+
+  border: inset 2px currentcolor;
+  border-radius: 999px;
+
+  animation: rotate infinite linear 1s;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
