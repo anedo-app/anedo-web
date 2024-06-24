@@ -17,5 +17,7 @@ export type PasswordFieldProps = React.DetailedHTMLProps<
   value: string | undefined;
   label?: string;
   error?: string;
+  noError?: boolean;
   onError?: (error?: string) => void;
+  onValidation?: (isValid: boolean) => void;
 };

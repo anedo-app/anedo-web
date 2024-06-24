@@ -6,9 +6,11 @@
   display: flex;
   gap: 8px;
   align-items: center;
+  justify-content: center;
 
   box-sizing: border-box;
 
+  text-align: center;
   text-decoration: none;
 
   border: solid 2px;
@@ -17,9 +19,18 @@
   transition-duration: $transition-duration;
   transition-property: color, background-color, border-color;
 
-
   &:focus-visible {
     outline: solid 4px $purple-125;
+  }
+
+  &.pushed,
+  &:active:not(&.disabled, &.loading) {
+    margin-top: 4px;
+    border-bottom-width: 2px;
+
+    &.small {
+      margin-top: 2px;
+    }
   }
 }
 
@@ -34,16 +45,6 @@
   padding: 4px 8px;
   border-bottom-width: 4px;
 }
-
-.keyDown {
-  margin-top: 4px;
-  border-bottom-width: 2px;
-  
-  &.small {
-    margin-top: 2px;
-  }
-}
-
 
 .primary {
   color: $black-100;
@@ -74,7 +75,7 @@
   background-color: $orange-85;
   border-color: $orange-115;
 
-  &:hover{
+  &:hover {
     color: $black-85;
     background-color: $orange-75;
     border-color: $orange-100;
@@ -83,13 +84,6 @@
 
 .disabled {
   cursor: not-allowed;
-
-  position: relative;
-
-  overflow: hidden;
-
-  width: max-content;
-
   background: repeating-linear-gradient(
     -115deg,
     $grey-100,
@@ -100,10 +94,42 @@
   background-color: $grey-100;
   border-color: $black-100;
 
-
-  &:hover{
+  &:hover {
     color: $black-100;
     background-color: $grey-100;
     border-color: $black-100;
+  }
+}
+
+.loading {
+  cursor: wait;
+  background: $grey-100;
+  background-color: $grey-100;
+  border-color: $black-100;
+
+  &:hover {
+    color: $black-100;
+    background-color: $grey-100;
+    border-color: $black-100;
+  }
+}
+
+.loader {
+  width: 16px;
+  height: 16px;
+
+  border: inset 2px currentcolor;
+  border-radius: 999px;
+
+  animation: rotate infinite linear 1s;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

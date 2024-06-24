@@ -34,6 +34,12 @@
   font-size: 1rem;
 }
 
+@mixin text-body-bold() {
+  @include roboto(bold, normal);
+
+  font-size: 1rem;
+}
+
 @mixin text-link() {
   @include roboto(400, normal);
 
