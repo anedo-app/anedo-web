@@ -9,13 +9,13 @@ import WaitingScreen from "./pages/WaitingScreen";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 
 const ProtectedRoute: React.FC<{children: React.ReactNode}> = ({children}) => {
-  const user = useUser();
+  const {user} = useUser();
 
   if (!user) return <Navigate to="/auth" replace />;
   return children;
 };
 const AuthRoute: React.FC<{children: React.ReactNode}> = ({children}) => {
-  const user = useUser();
+  const {user} = useUser();
 
   if (user) return <Navigate to="/" replace />;
   return children;

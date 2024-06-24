@@ -1,15 +1,15 @@
 import "../App.scss";
 import React from "react";
+import useUser from "@/hooks/useUser";
 import Button from "@/components/Button";
-import {useCookies} from "react-cookie";
 
 const Home: React.FC = () => {
-  const [_, _s, removeCookie] = useCookies(["user"]);
+  const {logout} = useUser();
 
   return (
     <div className="container">
       <h1 className="title">Home</h1>
-      <Button onClick={() => removeCookie("user")}>Clean cookies</Button>
+      <Button onClick={logout}>Clean cookies</Button>
     </div>
   );
 };

@@ -1,15 +1,22 @@
 import React, {useState} from "react";
+import useUser from "@/hooks/useUser";
+import Error from "@/components/Error";
 import Button from "@/components/Button";
 import style from "./LoginForm.module.scss";
 import EmailField from "@/components/EmailField";
 import PasswordField from "@/components/PasswordField";
+import useErrorMessages from "@/hooks/useErrorMessages";
 import useFormEmptyFields from "@/hooks/useFormEmptyFields";
-import {useCookies} from "react-cookie";
+import {FirebaseError} from "firebase/app";
 
 const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
+  const {getErrorMessage} = useErrorMessages();
+  const {login} = useUser();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [_, setCookie] = useCookies(["user"]);
+
+  const [error, setError] = useState<string>();
 
   const {isFieldEmpty, hasEmptyFields, setShowEmptyFields} = useFormEmptyFields(
     {
@@ -18,12 +25,15 @@ const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
     },
   );
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setShowEmptyFields(true);
 
     if (hasEmptyFields) return;
-
-    setCookie("user", email);
+    try {
+      await login(email, password);
+    } catch (e) {
+      if (e instanceof FirebaseError) setError(getErrorMessage(e));
+    }
   };
 
   return (
@@ -48,6 +58,9 @@ const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
       />
 
       <Button onClick={onSubmit}>M’identifier</Button>
+
+      <Error error={error} />
+
       <div className={style.authSwitch}>
         <p>Pas encore de compte ?</p>
         <button onClick={onAuthSwitch}>S’inscrire</button>

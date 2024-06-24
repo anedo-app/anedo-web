@@ -1,12 +1,19 @@
+import useUser from "@/hooks/useUser";
+import Error from "@/components/Error";
 import Button from "@/components/Button";
 import style from "./RegisterForm.module.scss";
 import TextField from "@/components/TextField";
 import EmailField from "@/components/EmailField";
 import PasswordField from "@/components/PasswordField";
+import useErrorMessages from "@/hooks/useErrorMessages";
 import React, {useEffect, useMemo, useState} from "react";
 import useFormEmptyFields from "@/hooks/useFormEmptyFields";
+import {FirebaseError} from "firebase/app";
 
 const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
+  const {register} = useUser();
+  const {getErrorMessage} = useErrorMessages();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,6 +21,8 @@ const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
 
   const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
+
+  const [error, setError] = useState<string>();
 
   const [differentPasswords, setDifferentPasswords] = useState(false);
 
@@ -32,12 +41,15 @@ const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
     [hasEmptyFields, isEmailValid, isPasswordValid, differentPasswords],
   );
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     setShowEmptyFields(true);
 
     if (!isFormValid) return;
-
-    console.warn("submit", {name, email, password, passwordConfirmation});
+    try {
+      await register(email, password, name);
+    } catch (e) {
+      if (e instanceof FirebaseError) setError(getErrorMessage(e));
+    }
   };
 
   useEffect(() => {
@@ -86,6 +98,9 @@ const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
         }
       />
       <Button onClick={onSubmit}>M’inscrire</Button>
+
+      <Error error={error} />
+
       <div className={style.authSwitch}>
         <p>Déjà un compte ?</p>
         <button onClick={onAuthSwitch}>S’identifier</button>
