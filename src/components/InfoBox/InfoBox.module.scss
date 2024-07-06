@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px;
+
+  background-color: $cream-100;
+  border: solid 1px $black-100;
+  border-radius: 8px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  h4 {
+    @include text-body-bold();
+  }
+
+  p {
+    @include text-body(400);
+  }
+}
+
+.closeButton {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  justify-content: center;
+
+  padding: 0;
+
+  background-color: transparent;
+  border: none;
+}
+
+.warning {
+  background-color: $yellow-50;
+  border-color: $yellow-150;
+
+  .icon {
+    color: $yellow-150;
+  }
+}
+
+.danger {
+  background-color: $orange-50;
+  border-color: $orange-150;
+
+  .icon {
+    color: $orange-150;
+  }
+}
+
+.success {
+  background-color: $green-50;
+  border-color: $green-150;
+
+  .icon {
+    color: $green-150;
+  }
+}

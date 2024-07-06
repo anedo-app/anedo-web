@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.authSwitch {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    @include text-body-bold();
+
+    cursor: pointer;
+    color: $black-100;
+    background-color: transparent;
+    border: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

@@ -25,6 +25,7 @@ export interface ButtonProps
   href?: string;
   target?: string;
   disabled?: boolean;
+  loading?: boolean;
   variant?: "primary" | "success" | "danger";
   size?: "normal" | "small";
   icon?: React.FC<IIconProps>;

@@ -51,8 +51,9 @@ describe("Button disabled", () => {
     expect(button.getByRole(ButtonRolesEnum.BUTTON).className).toContain(
       "disabled",
     );
+
     expect(button.getByRole(ButtonRolesEnum.BUTTON).className).toContain(
-      "keyDown",
+      "pushed",
     );
   });
 

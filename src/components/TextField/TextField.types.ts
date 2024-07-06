@@ -2,7 +2,11 @@ export enum TextFieldRolesEnum {
   TEXT_FIELD = "text-field",
 }
 
-export interface TextFieldProps extends React.HTMLAttributes<HTMLInputElement> {
+export interface TextFieldProps
+  extends React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > {
   value: string | undefined;
   label?: string;
   placeholder?: string;
