@@ -14,7 +14,6 @@ const Tile: React.FC<TileProps> = ({
   icon: Icon,
 }) => {
   const {s} = useStyles();
-  const [keyDown, setKeyDown] = React.useState(false);
 
   const classes = s([
     className,
@@ -22,7 +21,7 @@ const Tile: React.FC<TileProps> = ({
     {
       [style.disabled]: disabled,
       [style.small]: small,
-      [style.keyDown]: keyDown || disabled,
+      [style.keyDown]: disabled,
     },
   ]);
 
@@ -31,20 +30,9 @@ const Tile: React.FC<TileProps> = ({
     onClick();
   };
 
-  const onKey = (e: React.KeyboardEvent, type: "down" | "up") => {
-    if (e.key === " " || e.key === "Enter") {
-      if (type === "down") setKeyDown(true);
-      else setKeyDown(false);
-    }
-  };
-
   return (
     <button
       onClick={onUserClick}
-      onMouseDown={() => setKeyDown(true)}
-      onMouseUp={() => setKeyDown(false)}
-      onKeyDown={(e) => onKey(e, "down")}
-      onKeyUp={(e) => onKey(e, "up")}
       className={classes}
       disabled={disabled}
       role={TileRolesEnum.TILE}

@@ -21,6 +21,7 @@ interface UserStore {
   ) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: User | undefined) => void;
+  updateUser: (user: Partial<IUser>) => Promise<void>;
 }
 
 const useUser = create(
@@ -58,6 +59,18 @@ const useUser = create(
             photoURL: firebaseUser.photoURL,
           },
         });
+      },
+      updateUser: async (user: Partial<IUser>) => {
+        const newUser = await AuthService.updateUser(user);
+        if (newUser)
+          set({
+            user: {
+              uid: newUser.uid,
+              email: newUser.email || "",
+              displayName: newUser.displayName,
+              photoURL: newUser.photoURL,
+            },
+          });
       },
     }),
     {

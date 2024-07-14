@@ -30,6 +30,11 @@
     background-color: $cream-85;
     border-color: $black-85;
   }
+
+  &:active:not(&.disabled, &.loading) {
+    margin-top: 4px;
+    border-bottom-width: 2px;
+  }
 }
 
 .content {
@@ -45,11 +50,6 @@
   p {
     @include text-body(400);
   }
-}
-
-.keyDown {
-  margin-top: 4px;
-  border-bottom-width: 2px;
 }
 
 .disabled {
