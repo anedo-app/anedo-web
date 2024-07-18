@@ -8,7 +8,6 @@ import {
   CheckmarkIcon,
   CloseIcon,
   ForbiddenIcon,
-  QuestionMarkIcon,
 } from "@/Icons";
 
 const InfoBox: React.FC<InfoBoxProps> = ({
@@ -33,7 +32,7 @@ const InfoBox: React.FC<InfoBoxProps> = ({
       case "success":
         return <CheckmarkIcon {...props} />;
       default:
-        return <QuestionMarkIcon {...props} />;
+        return undefined;
     }
   };
 

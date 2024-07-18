@@ -65,6 +65,12 @@ const updateNameAndImage = async (user: User) => {
   return auth.currentUser;
 };
 
+const updateUser = async (user: Partial<User>) => {
+  if (!auth.currentUser) return;
+  await updateProfile(auth.currentUser, user);
+  return auth.currentUser;
+};
+
 export default {
   register,
   login,
@@ -72,4 +78,5 @@ export default {
   googleLogin,
   authState,
   updateNameAndImage,
+  updateUser,
 };
