@@ -72,6 +72,7 @@ const updateUser = async (user: Partial<User>) => {
 };
 
 export default {
+  auth,
   register,
   login,
   logout,

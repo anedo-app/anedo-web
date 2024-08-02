@@ -14,7 +14,9 @@ const NavBar: React.FC<{
   return (
     <div className={`${className} flex justify-between items-center w-full`}>
       {leftAction === "none" && <div className="w-12" />}
-      {leftAction === "home" && <Button icon={HomeIcon} />}
+      {leftAction === "home" && (
+        <Button icon={HomeIcon} onClick={() => navigate("/")} />
+      )}
       {leftAction === "back" && (
         <Button icon={ArrowLeftIcon} onClick={() => navigate(-1)} />
       )}

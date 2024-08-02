@@ -10,7 +10,7 @@ import {LogOutIcon, SaveIcon} from "@/Icons";
 import {SingleFileField} from "@/components/FileFields";
 
 const Profile: React.FC = () => {
-  const {user, updateUser} = useUser();
+  const {user, updateUser, logout} = useUser();
 
   const [name, setName] = useState(user?.displayName || "");
   const [image, setImage] = useState<string | File>(user?.photoURL || "");
@@ -55,7 +55,7 @@ const Profile: React.FC = () => {
       <NavBar
         leftAction="back"
         name="Profil"
-        rightAction={<Button onClick={() => {}} icon={LogOutIcon} />}
+        rightAction={<Button onClick={logout} icon={LogOutIcon} />}
       />
       <SingleFileField
         className="flex w-full items-center gap-8"

@@ -25,6 +25,9 @@
   },
   "dependencies": {
     "firebase": "^10.12.2",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "nanoid": "^5.0.7",
     "node-sass": "^9.0.0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
@@ -48,6 +51,8 @@
     "@storybook/react-vite": "^8.0.9",
     "@storybook/test": "^8.0.9",
     "@testing-library/react": "^15.0.2",
+    "@types/lodash.get": "^4.4.9",
+    "@types/lodash.set": "^4.3.9",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",

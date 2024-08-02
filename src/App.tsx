@@ -3,6 +3,7 @@ import React from "react";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Rules from "./pages/Rules";
+import Party from "./pages/Party";
 import useEnv from "./hooks/useEnv";
 import useUser from "./hooks/useUser";
 import Profile from "./pages/Profile";
@@ -47,6 +48,7 @@ const AppRouter = () => {
                 <Route index element={<Home />} />
                 <Route path="/rules" element={<Rules />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/party/:partyId" element={<Party />} />
                 <Route path="/waiting" element={<WaitingScreen />} />
               </Routes>
             </ProtectedRoute>

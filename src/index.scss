@@ -18,8 +18,13 @@ p {
   margin: 0;
 }
 
+html {
+  overflow: hidden;
+}
+
 #root {
   @include roboto(400, normal);
 
+  display: flex;
   height: 100dvh;
 }

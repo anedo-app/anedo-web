@@ -6,7 +6,7 @@ import {Outlet} from "react-router-dom";
 const Layout: React.FC = () => {
   const {appVersion, isDev} = useEnv();
   return (
-    <div className={style.root}>
+    <div className={style.root} id="rootTemplate">
       <div className={style.inner}>
         <Outlet />
       </div>

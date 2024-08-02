@@ -3,7 +3,7 @@ import {create} from "zustand";
 import {User} from "firebase/auth";
 import {persist} from "zustand/middleware";
 
-interface IUser {
+export interface IUser {
   uid: string;
   email: string;
   displayName: string | null;

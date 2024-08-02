@@ -31,6 +31,7 @@ const AuthModule: React.FC = () => {
         <h1>Bienvenue</h1>
         <p>Identifiez vous ou créez un compte pour continuer. </p>
       </div>
+
       {authState === "register" && (
         <RegisterForm onAuthSwitch={() => setAuthState("login")} />
       )}

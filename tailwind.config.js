@@ -4,6 +4,7 @@ import colors from "./src/styles/colors";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  safelist: ["overflow-hidden"],
   theme: {
     extend: {
       colors,

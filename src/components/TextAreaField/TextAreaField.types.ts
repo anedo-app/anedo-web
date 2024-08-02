@@ -3,7 +3,10 @@ export enum TextAreaFieldRolesEnum {
 }
 
 export interface TextAreaFieldProps
-  extends React.HTMLAttributes<HTMLTextAreaElement> {
+  extends React.DetailedHTMLProps<
+    React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+    HTMLTextAreaElement
+  > {
   value: string | undefined;
   label?: string;
   placeholder?: string;
