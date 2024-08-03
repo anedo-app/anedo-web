@@ -2,7 +2,12 @@ import useUser from "./useUser";
 import lodashSet from "lodash/set";
 import lodashGet from "lodash/get";
 import {create} from "zustand";
-import {IParty, PartyMemberInterface} from "@/api/parties/types";
+import {
+  AnecdoteInterface,
+  FullPartyUserType,
+  IParty,
+  PartyMemberInterface,
+} from "@/api/parties/types";
 
 type Paths<T> = T extends object
   ? {[K in keyof T]: `${Exclude<K, symbol>}${"" | `.${Paths<T[K]>}`}`}[keyof T]
@@ -11,6 +16,8 @@ type Paths<T> = T extends object
 type PartyStoreState = {
   party: IParty | null;
   userInfos: PartyMemberInterface | null;
+  anecdotes: AnecdoteInterface[] | null;
+  members: FullPartyUserType[] | null;
 };
 
 type PartyStore = PartyStoreState & {
@@ -24,6 +31,8 @@ type PartyStore = PartyStoreState & {
 const useParty = create<PartyStore>((set, get) => ({
   party: null,
   userInfos: null,
+  anecdotes: null,
+  members: null,
   computed: {
     isOwner: () => get().party?.ownerUid === useUser.getState().user?.uid,
   },

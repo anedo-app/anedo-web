@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import style from "./Avatar.module.scss";
 import useStyles from "@/hooks/useStyles";
-import {UserIcon} from "@/Icons";
 import {AvatarProps, AvatarRolesEnum} from "./Avatar.types";
 
 const Avatar: React.FC<AvatarProps> = ({
@@ -23,7 +22,7 @@ const Avatar: React.FC<AvatarProps> = ({
 
   return (
     <div className={classes} role={AvatarRolesEnum.CONTAINER}>
-      {!error ? (
+      {!error && src ? (
         <img
           role={AvatarRolesEnum.AVATAR}
           src={src}
@@ -31,7 +30,7 @@ const Avatar: React.FC<AvatarProps> = ({
           onError={() => setError(true)}
         />
       ) : (
-        <UserIcon role={AvatarRolesEnum.ERROR} size={isSmall ? 24 : 32} />
+        <p role={AvatarRolesEnum.ERROR}>:3</p>
       )}
     </div>
   );

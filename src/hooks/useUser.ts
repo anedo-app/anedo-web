@@ -1,6 +1,7 @@
 import AuthService from "@/api/Auth";
 import {create} from "zustand";
 import {User} from "firebase/auth";
+import {addUser} from "@/api/users";
 import {persist} from "zustand/middleware";
 
 export interface IUser {
@@ -35,6 +36,15 @@ const useUser = create(
       loginWithGoogle: async () => {
         const firebaseUser = await AuthService.googleLogin();
         get().setUser(firebaseUser);
+        // TODO cleanup
+        if (firebaseUser) {
+          await addUser({
+            uid: firebaseUser.uid,
+            email: firebaseUser.email || "",
+            displayName: firebaseUser.displayName,
+            photoURL: firebaseUser.photoURL,
+          });
+        }
       },
       logout: async () => {
         await AuthService.logout();
@@ -47,7 +57,16 @@ const useUser = create(
           password,
           displayName,
         );
-        if (firebaseUser) get().setUser(firebaseUser);
+        // TODO cleanup
+        if (firebaseUser) {
+          await addUser({
+            uid: firebaseUser.uid,
+            email: firebaseUser.email || "",
+            displayName: firebaseUser.displayName,
+            photoURL: firebaseUser.photoURL,
+          });
+          get().setUser(firebaseUser);
+        }
       },
       setUser: (firebaseUser) => {
         if (firebaseUser === undefined) return set({user: undefined});

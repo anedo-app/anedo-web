@@ -14,7 +14,7 @@ const NewAnecdoteModal: React.FC<{
   onClose: () => void;
   onSubmit: (v: string) => void;
 }> = ({isOpen, anecdote, onClose, onSubmit}) => {
-  const {party, userInfos} = useParty();
+  const {party, anecdotes} = useParty();
 
   const [value, setValue] = useState(anecdote.value);
   const [loading, setLoading] = useState(false);
@@ -23,7 +23,7 @@ const NewAnecdoteModal: React.FC<{
     try {
       if (!party) return;
       setLoading(true);
-      const userAnecdotes = userInfos?.anecdotes || [];
+      const userAnecdotes = anecdotes || [];
       const newAnecdote = {...anecdote, value};
       const updatedAnecdotes = userAnecdotes.map((a) =>
         a.id === newAnecdote.id ? newAnecdote : a,

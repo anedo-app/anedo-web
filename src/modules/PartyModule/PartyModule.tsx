@@ -4,6 +4,7 @@ import NavBar from "@/components/NavBar";
 import Loader from "@/components/Loader";
 import Anecdote from "./components/Anecdote";
 import React, {useEffect, useState} from "react";
+import MembersList from "./components/MembersList";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
 import {toast} from "react-toastify";
 import {getParty, getUserPartyInfos} from "@/api/parties";
@@ -13,7 +14,7 @@ import {Navigate, useNavigate, useParams} from "react-router-dom";
 const PartyModule: React.FC = () => {
   const navigate = useNavigate();
   const {partyId} = useParams();
-  const {party, userInfos, setPartyData} = useParty();
+  const {party, anecdotes, setPartyData} = useParty();
   const isOwner = useParty((s) => s.computed.isOwner);
   const computedIsOwner = isOwner();
 
@@ -38,8 +39,9 @@ const PartyModule: React.FC = () => {
     try {
       if (!partyId) return;
       if (!quiet && !party) setLoadingUser(true);
-      const userPartyInfos = await getUserPartyInfos(partyId);
-      setPartyData("userInfos", userPartyInfos);
+      const {userInfo, anecdotes} = await getUserPartyInfos(partyId);
+      setPartyData("userInfos", userInfo);
+      setPartyData("anecdotes", anecdotes);
       setLoadingUser(false);
     } catch (e) {
       setLoadingUser(false);
@@ -82,6 +84,7 @@ const PartyModule: React.FC = () => {
             />
           </div>
         </div>
+        <MembersList />
         {computedIsOwner && (
           <div className="flex flex-col gap-2">
             <Button
@@ -101,7 +104,7 @@ const PartyModule: React.FC = () => {
           <div className="flex flex-col gap-4">
             <h2 className="text-small-title">Tes anecdotes</h2>
             <div className="flex flex-col gap-2">
-              {userInfos?.anecdotes.map((a, i) => (
+              {anecdotes?.map((a, i) => (
                 <Anecdote
                   anecdote={a}
                   key={a.type + i}

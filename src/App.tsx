@@ -8,9 +8,17 @@ import useEnv from "./hooks/useEnv";
 import useUser from "./hooks/useUser";
 import Profile from "./pages/Profile";
 import Layout from "@/components/Layout";
+import MembersList from "./pages/MembersList";
 import WaitingScreen from "./pages/WaitingScreen";
 import {ToastContainer} from "react-toastify";
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Navigate,
+  Route,
+  RouterProvider,
+  Routes,
+} from "react-router-dom";
 
 const ProtectedRoute: React.FC<{children: React.ReactNode}> = ({children}) => {
   const {user} = useUser();
@@ -49,6 +57,7 @@ const AppRouter = () => {
                 <Route path="/rules" element={<Rules />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/party/:partyId" element={<Party />} />
+                <Route path="/members-list" element={<MembersList />} />
                 <Route path="/waiting" element={<WaitingScreen />} />
               </Routes>
             </ProtectedRoute>
@@ -65,16 +74,27 @@ const AppRouter = () => {
     );
 };
 
+const router = createBrowserRouter(
+  createRoutesFromElements(<Route element={<Layout />}>{AppRouter()}</Route>),
+);
+
 const App: React.FC = () => {
+  const {appVersion, isDev} = useEnv();
   return (
-    <>
-      <ToastContainer position="top-center" autoClose={5000} theme="colored" />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>{AppRouter()}</Route>
-        </Routes>
-      </BrowserRouter>
-    </>
+    <div className="root" id="rootTemplate">
+      <React.StrictMode>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          theme="colored"
+        />
+        <RouterProvider router={router} />
+      </React.StrictMode>
+      <p className="version">
+        {appVersion}
+        {isDev && " dev"}
+      </p>
+    </div>
   );
 };
 

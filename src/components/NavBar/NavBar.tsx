@@ -12,7 +12,9 @@ const NavBar: React.FC<{
 }> = ({className = "", name, leftAction = "none", rightAction}) => {
   const navigate = useNavigate();
   return (
-    <div className={`${className} flex justify-between items-center w-full`}>
+    <div
+      className={`${className} sticky top-8 flex justify-between items-center w-full`}
+    >
       {leftAction === "none" && <div className="w-12" />}
       {leftAction === "home" && (
         <Button icon={HomeIcon} onClick={() => navigate("/")} />

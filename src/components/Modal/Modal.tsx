@@ -11,7 +11,7 @@ const Modal: React.FC<ModalProps> = ({
   title,
   children,
   buttons,
-  portalTarget = "#rootTemplate",
+  portalTarget = "rootTemplate",
 }) => {
   const {s} = useStyles();
 

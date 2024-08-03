@@ -8,6 +8,10 @@
 .tabs {
   display: flex;
 
+  .tab {
+    flex: 1;
+  }
+
   .tab:not(:last-child, :first-child) {
     border-radius: 0;
   }

@@ -1,4 +1,5 @@
 import firebase from "./firebase";
+import {IUser} from "@/hooks/useUser";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -56,7 +57,7 @@ const googleLogin = async () => {
 
 const authState = (fcn: NextOrObserver<User>) => onAuthStateChanged(auth, fcn);
 
-const updateNameAndImage = async (user: User) => {
+const updateNameAndImage = async (user: IUser) => {
   if (!auth.currentUser) return;
   await updateProfile(auth.currentUser, {
     displayName: user.displayName,
@@ -65,7 +66,7 @@ const updateNameAndImage = async (user: User) => {
   return auth.currentUser;
 };
 
-const updateUser = async (user: Partial<User>) => {
+const updateUser = async (user: Partial<IUser>) => {
   if (!auth.currentUser) return;
   await updateProfile(auth.currentUser, user);
   return auth.currentUser;

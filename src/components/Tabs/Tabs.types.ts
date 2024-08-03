@@ -6,7 +6,7 @@ export enum TabsRolesEnum {
 export interface Tab {
   label: string;
   value: string;
-  content: React.ReactNode;
+  content?: React.ReactNode;
   notification?: number;
 }
 

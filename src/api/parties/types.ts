@@ -1,3 +1,5 @@
+import {IUser} from "@/hooks/useUser";
+
 export interface AnecdoteInterface {
   id: string;
   type: "true" | "false";
@@ -8,8 +10,9 @@ export interface PartyMemberInterface {
   isReady: boolean;
   isHost: boolean;
   guessed: boolean;
-  anecdotes: AnecdoteInterface[];
 }
+
+export type FullPartyUserType = PartyMemberInterface & IUser;
 
 export type IParty = {
   id: string;
@@ -18,5 +21,4 @@ export type IParty = {
   canStart: boolean;
   membersUid: string[];
   ownerUid: string;
-  members: string[];
 };

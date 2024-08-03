@@ -1,19 +1,13 @@
 import React from "react";
-import useEnv from "@/hooks/useEnv";
 import style from "./Layout.module.scss";
+import useStyles from "@/hooks/useStyles";
 import {Outlet} from "react-router-dom";
 
-const Layout: React.FC = () => {
-  const {appVersion, isDev} = useEnv();
+const Layout: React.FC<{className?: string}> = ({className = ""}) => {
+  const {s} = useStyles();
   return (
-    <div className={style.root} id="rootTemplate">
-      <div className={style.inner}>
-        <Outlet />
-      </div>
-      <p className="version">
-        {appVersion}
-        {isDev && " dev"}
-      </p>
+    <div className={s([style.inner, className])}>
+      <Outlet />
     </div>
   );
 };
