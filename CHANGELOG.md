@@ -1,3 +1,31 @@
+# [1.2.0](https://github.com/anedo-app/anedo-web/compare/v1.1.0...v1.2.0) (2024-08-04)
+
+
+### Bug Fixes
+
+* **Tile:** Add children and small prop ([#15](https://github.com/anedo-app/anedo-web/issues/15)) ([b8f91f2](https://github.com/anedo-app/anedo-web/commit/b8f91f27749afe7d9bd0453a90ff27e23a79258d))
+* update colors and use colors.ts to export them ([#3](https://github.com/anedo-app/anedo-web/issues/3)) ([ef5ed01](https://github.com/anedo-app/anedo-web/commit/ef5ed01f425c4f32783625143addb6a8d627431e))
+
+
+### Features
+
+* add Avatar component & update icons script ([#11](https://github.com/anedo-app/anedo-web/issues/11)) ([a895a67](https://github.com/anedo-app/anedo-web/commit/a895a6703e63e5e81f97b9f9714c99e98043aca3))
+* add EmailField ([#14](https://github.com/anedo-app/anedo-web/issues/14)) ([392e196](https://github.com/anedo-app/anedo-web/commit/392e196ab3733ae5fa616701266c68715219913e))
+* Add pages Home, Profile and Rules ([#17](https://github.com/anedo-app/anedo-web/issues/17)) ([def9cab](https://github.com/anedo-app/anedo-web/commit/def9cab81ac4eacee41f24a4734ff98d0f2a76cb))
+* add PasswordField ([#13](https://github.com/anedo-app/anedo-web/issues/13)) ([c73d083](https://github.com/anedo-app/anedo-web/commit/c73d083b7750004f7baead2849794cc80d17ce32))
+* add simple router ([205ed6f](https://github.com/anedo-app/anedo-web/commit/205ed6fab08458f455cc2fd7b2c7f0a9e1782285))
+* add storybook config and publishing ([a2e1bc7](https://github.com/anedo-app/anedo-web/commit/a2e1bc7fd8e6de8e64cac51385c81c382dc80603))
+* add Tabs component ([#12](https://github.com/anedo-app/anedo-web/issues/12)) ([5f2557d](https://github.com/anedo-app/anedo-web/commit/5f2557d2f92a62a5a8f13bddee4600bf1d25d217))
+* Add tag component ([#10](https://github.com/anedo-app/anedo-web/issues/10)) ([37b7a20](https://github.com/anedo-app/anedo-web/commit/37b7a20d136bb88aa487cb3be95075166fab4893))
+* Add textarea field ([#9](https://github.com/anedo-app/anedo-web/issues/9)) ([8762b25](https://github.com/anedo-app/anedo-web/commit/8762b25315e473a2ce43dfedf9367aefa8ffbf17))
+* add TextField component ([#8](https://github.com/anedo-app/anedo-web/issues/8)) ([a931664](https://github.com/anedo-app/anedo-web/commit/a93166404a68bc123d5ed14ca38d8108e35716f7))
+* add tile component ([#7](https://github.com/anedo-app/anedo-web/issues/7)) ([98ef72a](https://github.com/anedo-app/anedo-web/commit/98ef72ac68448a96f90edc1b5f0b379855ef46bd))
+* add unit tests and first component draft ([#2](https://github.com/anedo-app/anedo-web/issues/2)) ([d172fe2](https://github.com/anedo-app/anedo-web/commit/d172fe2b52b9d8bbdab33cd3b51eb6efbb27a0af))
+* **AuthPage:** Auth methods and some design system fixes ([#16](https://github.com/anedo-app/anedo-web/issues/16)) ([740513f](https://github.com/anedo-app/anedo-web/commit/740513f34e974ae03cbb282901455b347be2118b))
+* create button component ([d94b058](https://github.com/anedo-app/anedo-web/commit/d94b05881812e2ddbac2c69b19f75f73bb37731b))
+* Create join party ([63d4af4](https://github.com/anedo-app/anedo-web/commit/63d4af480443e1cb1b099c524d9f945030b7e38f))
+* Create members list ([3b9c1f5](https://github.com/anedo-app/anedo-web/commit/3b9c1f5d0b7230a0f78c453a29ed0b2aa11436df))
+
 # [1.1.0](https://github.com/anedo-app/anedo-web/compare/v1.0.2...v1.1.0) (2024-04-28)
 
 
