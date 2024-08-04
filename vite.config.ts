@@ -13,6 +13,8 @@ export default defineConfig({
           @import "normalize.css";
           @import "./src/styles/fonts.scss";
           @import "./src/styles/texts.scss";
+          @import "./src/styles/transitions.scss";
+          @import "./src/styles/resets.scss";
           ${Object.entries(colors)
             .map(([key, value]) => `$${key}: ${value};`)
             .join("\n")}

@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
 
 # Svg icons from figma
 src/Icons/*.svg
@@ -26,3 +27,6 @@ src/Icons/*.svg
 *.njsproj
 *.sln
 *.sw?
+
+*storybook.log
+storybook-static/

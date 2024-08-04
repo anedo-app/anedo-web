@@ -14,13 +14,19 @@ const formatSvg = (svgContent) => {
   const fillAttributeRegex = /fill="[^"]*"/g,
     strokeAttributeRegex = /stroke="[^"]*"/g,
     widthAttributeRegex = /width="[^"]*"/g,
-    heightAttributeRegex = /height="[^"]*"/g;
+    heightAttributeRegex = /height="[^"]*"/g,
+    kebabCaseAttributesRegex = /(\w+)-(\w+)/g;
 
   return svgContent
-    .replace(fillAttributeRegex, "fill={color}")
+    .replace(fillAttributeRegex, "fill={props.color}")
     .replace(strokeAttributeRegex, "")
-    .replace(widthAttributeRegex, "width={size}")
-    .replace(heightAttributeRegex, "height={size}");
+    .replace(widthAttributeRegex, "width={props.size}")
+    .replace(heightAttributeRegex, "height={props.size}")
+    .replace(/<svg/, "<svg {...props}")
+    .replace(
+      kebabCaseAttributesRegex,
+      (_, g1, g2) => `${g1}${g2.charAt(0).toUpperCase()}${g2.slice(1)}`, // thanks to copilot
+    );
 };
 
 const kebabToPascal = (svgName) => {
@@ -38,13 +44,13 @@ const formattedSvgs = icons.map((file) => {
   const svgContent = fs.readFileSync(path.join(iconsFolder, file), "utf-8");
   const modifiedSvgContent = formatSvg(svgContent);
   return `
-    const ${kebabToPascal(file.replace(".svg", ""))}Icon:React.FC<{size?: number; color?: string}> = ({size = 24, color}) => (${modifiedSvgContent})
+    const ${kebabToPascal(file.replace(".svg", ""))}Icon:React.FC<IIconProps> = (props) => (${modifiedSvgContent})
   `;
 });
 
 fs.writeFileSync(
   "./src/Icons/index.tsx",
-  `import React from "react" \n ${formattedSvgs.join("\n")} \n export { ${svgNames.join(",\n")} }`,
+  `import {IIconProps} from "./icons.type"; import React from "react" \n ${formattedSvgs.join("\n")} \n export { ${svgNames.join(",\n")} }`,
 );
 
 exec("prettier --write ./src/Icons/index.tsx");

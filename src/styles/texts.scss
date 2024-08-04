@@ -34,9 +34,15 @@
   font-size: 1rem;
 }
 
+@mixin text-body-bold() {
+  @include roboto(bold, normal);
+
+  font-size: 1rem;
+}
+
 @mixin text-link() {
   @include roboto(400, normal);
-  
+
   font-size: 1rem;
   color: $purple-125;
 }
@@ -52,4 +58,3 @@
 
   font-size: 0.75rem;
 }
-

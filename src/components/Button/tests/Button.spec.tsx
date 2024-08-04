@@ -1,5 +1,6 @@
 import Button from "..";
 import {fn} from "@vitest/spy";
+import {EyeIcon} from "@/Icons";
 import {TestContext} from "@/types/tests.interface";
 import {fireEvent, render} from "@testing-library/react";
 import {describe, expect, test, beforeEach} from "vitest";
@@ -34,6 +35,12 @@ describe("Button", () => {
 
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
+
+  test<LocalTestContext>("should display Icon", ({wrapper}) => {
+    const button = wrapper({icon: EyeIcon});
+
+    expect(button.getByRole(ButtonRolesEnum.ICON)).toBeDefined();
+  });
 });
 
 describe("Button disabled", () => {
@@ -43,6 +50,10 @@ describe("Button disabled", () => {
     expect(button.getByText(title)).toBeDefined();
     expect(button.getByRole(ButtonRolesEnum.BUTTON).className).toContain(
       "disabled",
+    );
+
+    expect(button.getByRole(ButtonRolesEnum.BUTTON).className).toContain(
+      "pushed",
     );
   });
 

@@ -1,12 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+html {
+  overflow: hidden;
+}
+
 #root {
   @include roboto(400, normal);
 
-  height: 100vh;
+  display: flex;
+  height: 100dvh;
 }
-

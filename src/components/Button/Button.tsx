@@ -10,19 +10,44 @@ const Button: React.FC<ButtonProps> = ({
   href,
   target,
   disabled,
+  variant = "primary",
+  size = "normal",
+  icon: Icon,
+  loading,
+  pushed,
+  ...props
 }) => {
   const {s} = useStyles();
 
   const classes = s([
     className,
     style.buttonContainer,
+    style[size],
+    style[variant],
     {
       [style.disabled]: disabled,
+      [style.loading]: loading,
+      [style.pushed]: disabled || pushed,
     },
   ]);
 
   const content = () => {
-    return <span className={style.content}>{children}</span>;
+    return (
+      <>
+        {loading ? (
+          <div className={style.loader} />
+        ) : (
+          Icon && (
+            <Icon
+              size={size === "small" ? 16 : 24}
+              color="currentColor"
+              role={ButtonRolesEnum.ICON}
+            />
+          )
+        )}
+        {children && <span className={style.content}>{children}</span>}
+      </>
+    );
   };
 
   if (href)
@@ -32,13 +57,18 @@ const Button: React.FC<ButtonProps> = ({
         href={href}
         target={target}
         role={ButtonRolesEnum.LINK}
+        {...props}
       >
         {content()}
       </a>
     );
 
-  const canClick = () => !disabled;
-  const onUserClick = () => canClick() && onClick && onClick();
+  const canClick = () => !disabled || !onClick;
+
+  const onUserClick = () => {
+    if (!canClick() || !onClick || pushed || disabled || loading) return;
+    onClick();
+  };
 
   return (
     <button
@@ -46,6 +76,7 @@ const Button: React.FC<ButtonProps> = ({
       className={classes}
       disabled={disabled}
       role={ButtonRolesEnum.BUTTON}
+      {...props}
     >
       {content()}
     </button>

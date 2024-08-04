@@ -1,0 +1,43 @@
+.container {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  aspect-ratio: 1/1;
+  width: 48px;
+  height: 48px;
+
+  background-color: $cream-100;
+  border: solid 0 transparent;
+  border-radius: 48px;
+  box-shadow: 0 0 0 2px $black-100;
+
+  transition: border 0.1s ease-in-out;
+
+  img {
+    display: block;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+  }
+}
+
+.waiting {
+  border: solid 2px $yellow-100;
+}
+
+.ready {
+  border: solid 2px $green-100;
+}
+
+.small {
+  width: 32px;
+  height: 32px;
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
+}
