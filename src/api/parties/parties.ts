@@ -79,6 +79,7 @@ export const createParty = async (name: string): Promise<string | void> => {
       id,
       name,
       isStarted: false,
+      isFinished: false,
       membersUid: [ownerUid],
       ownerUid,
     };

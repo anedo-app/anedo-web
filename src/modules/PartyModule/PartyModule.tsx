@@ -7,6 +7,7 @@ import React, {useEffect, useState} from "react";
 import MembersList from "./components/MembersList";
 import StartButton from "./components/StartButton";
 import PartyStartedModule from "../PartyStartedModule";
+import TerminatePartyButton from "./components/TerminatePartyButton";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
 import {toast} from "react-toastify";
 import {BookOpenIcon, CopyIcon} from "@/Icons";
@@ -108,7 +109,10 @@ const PartyModule: React.FC = () => {
             ))}
         </div>
       </div>
-      <QuiteLeavePartyButton />
+      <div className="flex gap-2 justify-center">
+        <TerminatePartyButton />
+        <QuiteLeavePartyButton />
+      </div>
     </div>
   );
 };

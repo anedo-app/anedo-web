@@ -11,7 +11,7 @@ export enum ButtonVariantEnum {
 }
 
 export interface AvatarProps {
-  src: string | undefined;
+  src: string | undefined | null;
   alt?: string;
   variant?: "primary" | "waiting" | "ready";
   isSmall?: boolean;

@@ -24,6 +24,7 @@ export type IParty = {
   id: string;
   name: string;
   isStarted: boolean;
+  isFinished: boolean;
   membersUid: string[];
   ownerUid: string;
 };

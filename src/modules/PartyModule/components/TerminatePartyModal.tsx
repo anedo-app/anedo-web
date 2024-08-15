@@ -2,22 +2,25 @@ import React, {useState} from "react";
 import Modal from "@/components/Modal";
 import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
-import {TrashIcon} from "@/Icons";
-import {deleteParty} from "@/api/parties";
+import {ForbiddenIcon} from "@/Icons";
+import {updateParty} from "@/api/parties";
+import {IParty} from "@/api/parties/types";
 
-const DeletePartyModal: React.FC<{
+const TerminatePartyModal: React.FC<{
   isOpen: boolean;
   onClose: () => void;
-  onDelete: () => void;
-}> = ({isOpen, onClose, onDelete}) => {
-  const [loading, setLoading] = useState(false);
+  onTerminate: () => void;
+}> = ({isOpen, onClose, onTerminate}) => {
   const getPartyData = useParty((s) => s.getPartyData);
+
+  const [loading, setLoading] = useState(false);
 
   const onPartyDelete = async () => {
     try {
       setLoading(true);
-      await deleteParty(getPartyData("party.id"));
-      onDelete();
+      const party = getPartyData<IParty>("party");
+      await updateParty({...party, isFinished: true});
+      onTerminate();
       setLoading(false);
     } catch (e) {
       setLoading(false);
@@ -26,7 +29,7 @@ const DeletePartyModal: React.FC<{
   };
   return (
     <Modal
-      title="Supprimer la partie en cours ?"
+      title="Terminer la partie ?"
       onClose={onClose}
       isOpen={isOpen}
       className="flex flex-col gap-8 text-center"
@@ -34,12 +37,12 @@ const DeletePartyModal: React.FC<{
       buttons={
         <>
           <Button
-            icon={TrashIcon}
+            icon={ForbiddenIcon}
             variant="danger"
             loading={loading}
             onClick={onPartyDelete}
           >
-            Oui je veux supprimer la partie
+            Oui je veux terminer la partie
           </Button>
           <Button disabled={loading} onClick={onClose}>
             Non, annuler
@@ -47,12 +50,10 @@ const DeletePartyModal: React.FC<{
         </>
       }
     >
-      <p>
-        Es-tu sûr de vouloir supprimer cette partie ? Cette action est
-        irréversible.
-      </p>
+      <p>Tous les joueurs n'ont pas encore terminé leur enquête.</p>
+      <p>Êtes-vous certain de vouloir mettre un terme à la partie ?</p>
     </Modal>
   );
 };
 
-export default DeletePartyModal;
+export default TerminatePartyModal;
