@@ -2,22 +2,25 @@ import React, {useState} from "react";
 import useParty from "@/hooks/useParty";
 import GuessTile from "./components/GuessTile";
 import CountDown from "./components/CountDown";
+import UserGuessed from "./components/UserGuessed";
 import TooSoonModal from "./components/TooSoonModal";
 import WrongAnswerModal from "./components/WrongAnswerModal";
-import RightAnswerModal from "./components/RightAnswerModal";
+import WrightAnswerModal from "./components/WrightAnswerModal";
 
 const PartyStartedModule: React.FC = () => {
-  const {anecdotesToGuess} = useParty();
+  const {anecdotesToGuess, userInfos} = useParty();
 
   const [isWrongAnswerModalOpen, setIsWrongAnswerModalOpen] = useState(false);
-  const [isRightAnswerModalOpen, setIsRightAnswerModalOpen] = useState(false);
+  const [isWrightAnswerModalOpen, setIsWrightAnswerModalOpen] = useState(false);
   const [isTooSoonModalOpen, setIsTooSoonModalOpen] = useState(false);
 
   const onAnswer = (type: string) => {
     if (type === "too-early") setIsTooSoonModalOpen(true);
     else if (type === "incorrect") setIsWrongAnswerModalOpen(true);
-    else setIsRightAnswerModalOpen(true);
+    else setIsWrightAnswerModalOpen(true);
   };
+
+  if (userInfos?.guessed) return <UserGuessed />;
 
   return (
     <>
@@ -37,10 +40,10 @@ const PartyStartedModule: React.FC = () => {
             onClose={() => setIsWrongAnswerModalOpen(false)}
           />
         )}
-        {isRightAnswerModalOpen && (
-          <RightAnswerModal
-            isOpen={isRightAnswerModalOpen}
-            onClose={() => setIsRightAnswerModalOpen(false)}
+        {isWrightAnswerModalOpen && (
+          <WrightAnswerModal
+            isOpen={isWrightAnswerModalOpen}
+            onClose={() => setIsWrightAnswerModalOpen(false)}
           />
         )}
         {isTooSoonModalOpen && (
