@@ -5,18 +5,18 @@ import Loader from "@/components/Loader";
 import Anecdote from "./components/Anecdote";
 import React, {useEffect, useState} from "react";
 import MembersList from "./components/MembersList";
+import StartButton from "./components/StartButton";
+import PartyStartedModule from "../PartyStartedModule";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
 import {toast} from "react-toastify";
+import {BookOpenIcon, CopyIcon} from "@/Icons";
 import {getParty, getUserPartyInfos} from "@/api/parties";
-import {BookOpenIcon, CopyIcon, PlayCircleIcon} from "@/Icons";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 
 const PartyModule: React.FC = () => {
   const navigate = useNavigate();
   const {partyId} = useParams();
   const {party, anecdotes, setPartyData} = useParty();
-  const isOwner = useParty((s) => s.computed.isOwner);
-  const computedIsOwner = isOwner();
 
   const [loading, setLoading] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
@@ -39,9 +39,11 @@ const PartyModule: React.FC = () => {
     try {
       if (!partyId) return;
       if (!quiet && !party) setLoadingUser(true);
-      const {userInfo, anecdotes} = await getUserPartyInfos(partyId);
+      const {userInfo, anecdotes, anecdotesToGuess} =
+        await getUserPartyInfos(partyId);
       setPartyData("userInfos", userInfo);
       setPartyData("anecdotes", anecdotes);
+      setPartyData("anecdotesToGuess", anecdotesToGuess);
       setLoadingUser(false);
     } catch (e) {
       setLoadingUser(false);
@@ -85,35 +87,26 @@ const PartyModule: React.FC = () => {
           </div>
         </div>
         <MembersList />
-        {computedIsOwner && (
-          <div className="flex flex-col gap-2">
-            <Button
-              className="w-full"
-              disabled={!party.canStart}
-              icon={PlayCircleIcon}
-            >
-              Lancer la partie
-            </Button>
-            <p className="text-black-100 text-tag text-center">
-              La partie ne pourra-t-être lancée que lorsque tous les
-              participants auront entrés leurs anecdotes.
-            </p>
-          </div>
-        )}
-        {!loadingUser && (
-          <div className="flex flex-col gap-4">
-            <h2 className="text-small-title">Tes anecdotes</h2>
-            <div className="flex flex-col gap-2">
-              {anecdotes?.map((a, i) => (
-                <Anecdote
-                  anecdote={a}
-                  key={a.type + i}
-                  onSubmit={() => fetchUserPartyInfos(true)}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        {!party.isStarted && <StartButton />}
+        <div className="flex flex-col gap-4">
+          {!loadingUser &&
+            (party.isStarted ? (
+              <PartyStartedModule />
+            ) : (
+              <>
+                <h2 className="text-small-title">Tes anecdotes</h2>
+                <div className="flex flex-col gap-2">
+                  {anecdotes?.map((a, i) => (
+                    <Anecdote
+                      anecdote={a}
+                      key={a.type + i}
+                      onSubmit={() => fetchUserPartyInfos(true)}
+                    />
+                  ))}
+                </div>
+              </>
+            ))}
+        </div>
       </div>
       <QuiteLeavePartyButton />
     </div>

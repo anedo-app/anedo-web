@@ -1,5 +1,8 @@
-import {IUser} from "@/hooks/useUser";
-
+export interface AnecdoteToGuessInterface {
+  guesserUid: string;
+  anecdotesOwnerUid: string;
+  anecdotes: Omit<AnecdoteInterface, "type">;
+}
 export interface AnecdoteInterface {
   id: string;
   type: "true" | "false";
@@ -10,15 +13,10 @@ export interface IAnecdoteToGuess extends AnecdoteInterface {
   type: never;
 }
 
-export interface PartyMemberInterface {
+export interface PartyAnecdoteInterface {
   uid: string;
-  isReady: boolean;
-  isHost: boolean;
-  guessed: boolean;
-  nextGuessTime?: number;
+  anecdotes?: AnecdoteInterface[];
 }
-
-export type FullPartyUserType = PartyMemberInterface & IUser;
 
 export type IParty = {
   id: string;

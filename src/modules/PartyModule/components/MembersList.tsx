@@ -14,10 +14,16 @@ const MembersList: React.FC = () => {
   const membersUid = useParty(useShallow((s) => s.party?.membersUid));
   const {party, members, setPartyData} = useParty();
 
-  const tagContent =
-    membersUid && membersUid?.length > 1
+  const tagContent = () => {
+    if (party?.isStarted)
+      return members
+        ? `${members.filter((m) => m.guessed).length} / ${members.length} trouvées`
+        : "Calculs...";
+
+    return membersUid && membersUid?.length > 1
       ? `${membersUid.length} prêts`
       : "En attente";
+  };
 
   const fetchMembers = async () => {
     if (!membersUid || !party?.id) return;
@@ -36,8 +42,10 @@ const MembersList: React.FC = () => {
   return (
     <div className="flex flex-col font-bold gap-4">
       <div className="flex w-full justify-between items-center">
-        <h3>Liste des joueurs</h3>
-        <Tag text={tagContent} />
+        <h3>
+          {party?.isStarted ? "Avancement de l’enquête" : "Liste des joueurs"}
+        </h3>
+        <Tag text={tagContent()} />
       </div>
       <div className="flex justify-between items-center">
         <div className="flex justify-between items-center">

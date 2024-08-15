@@ -24,6 +24,7 @@
     ]
   },
   "dependencies": {
+    "date-fns": "^3.6.0",
     "firebase": "^10.12.2",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
