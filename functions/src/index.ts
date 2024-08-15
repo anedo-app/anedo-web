@@ -1,7 +1,6 @@
 import * as admin from "firebase-admin";
 
 import {
-  AnecdoteInterface,
   AnecdoteToGuessInterface,
   IAnecdoteToGuess,
   PartyAnecdoteInterface,
