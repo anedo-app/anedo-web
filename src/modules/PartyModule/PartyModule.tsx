@@ -5,18 +5,20 @@ import Loader from "@/components/Loader";
 import Anecdote from "./components/Anecdote";
 import React, {useEffect, useState} from "react";
 import MembersList from "./components/MembersList";
+import StartButton from "./components/StartButton";
+import PartyEndedModule from "../PartyEndedModule";
+import PartyStartedModule from "../PartyStartedModule";
+import TerminatePartyButton from "./components/TerminatePartyButton";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
 import {toast} from "react-toastify";
-import {getParty, getUserPartyInfos} from "@/api/parties";
-import {BookOpenIcon, CopyIcon, PlayCircleIcon} from "@/Icons";
+import {BookOpenIcon, CopyIcon} from "@/Icons";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {getAllPartyMembers, getParty, getUserPartyInfos} from "@/api/parties";
 
 const PartyModule: React.FC = () => {
   const navigate = useNavigate();
   const {partyId} = useParams();
   const {party, anecdotes, setPartyData} = useParty();
-  const isOwner = useParty((s) => s.computed.isOwner);
-  const computedIsOwner = isOwner();
 
   const [loading, setLoading] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
@@ -39,9 +41,11 @@ const PartyModule: React.FC = () => {
     try {
       if (!partyId) return;
       if (!quiet && !party) setLoadingUser(true);
-      const {userInfo, anecdotes} = await getUserPartyInfos(partyId);
+      const {userInfo, anecdotes, anecdotesToGuess} =
+        await getUserPartyInfos(partyId);
       setPartyData("userInfos", userInfo);
       setPartyData("anecdotes", anecdotes);
+      setPartyData("anecdotesToGuess", anecdotesToGuess);
       setLoadingUser(false);
     } catch (e) {
       setLoadingUser(false);
@@ -49,10 +53,19 @@ const PartyModule: React.FC = () => {
     }
   };
 
+  const fetchMembers = async () => {
+    if (!party?.id) return;
+
+    const members = await getAllPartyMembers(party.id, party.membersUid);
+
+    setPartyData("members", members);
+  };
+
   useEffect(() => {
     if (!party) setLoading(true);
     fetchParty();
     fetchUserPartyInfos();
+    fetchMembers();
   }, []);
 
   if (!partyId) return <Navigate to={"/"} replace />;
@@ -75,47 +88,48 @@ const PartyModule: React.FC = () => {
       <div className="grow flex-col flex gap-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-title text-center">{party.name}</h1>
-          <div className="flex gap-4 items-center justify-center">
-            <p className="text-black-100">#{party.id}</p>
-            <Button
-              size="small"
-              icon={CopyIcon}
-              onClick={() => navigator.clipboard.writeText(party.id)}
-            />
-          </div>
-        </div>
-        <MembersList />
-        {computedIsOwner && (
-          <div className="flex flex-col gap-2">
-            <Button
-              className="w-full"
-              disabled={!party.canStart}
-              icon={PlayCircleIcon}
-            >
-              Lancer la partie
-            </Button>
-            <p className="text-black-100 text-tag text-center">
-              La partie ne pourra-t-être lancée que lorsque tous les
-              participants auront entrés leurs anecdotes.
-            </p>
-          </div>
-        )}
-        {!loadingUser && (
-          <div className="flex flex-col gap-4">
-            <h2 className="text-small-title">Tes anecdotes</h2>
-            <div className="flex flex-col gap-2">
-              {anecdotes?.map((a, i) => (
-                <Anecdote
-                  anecdote={a}
-                  key={a.type + i}
-                  onSubmit={() => fetchUserPartyInfos(true)}
-                />
-              ))}
+          {!party.isFinished && (
+            <div className="flex gap-4 items-center justify-center">
+              <p className="text-black-100">#{party.id}</p>
+              <Button
+                size="small"
+                icon={CopyIcon}
+                onClick={() => navigator.clipboard.writeText(party.id)}
+              />
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        {!party.isFinished && <MembersList />}
+        {!party.isStarted && <StartButton />}
+
+        <div className="flex flex-col gap-4">
+          {!loadingUser &&
+            (party.isFinished ? (
+              <PartyEndedModule />
+            ) : party.isStarted ? (
+              <PartyStartedModule />
+            ) : (
+              <>
+                <h2 className="text-small-title">Tes anecdotes</h2>
+                <div className="flex flex-col gap-2">
+                  {anecdotes?.map((a, i) => (
+                    <Anecdote
+                      anecdote={a}
+                      key={a.type + i}
+                      onSubmit={() => fetchUserPartyInfos(true)}
+                    />
+                  ))}
+                </div>
+              </>
+            ))}
+        </div>
       </div>
-      <QuiteLeavePartyButton />
+      {!party.isFinished && (
+        <div className="flex gap-2 justify-center">
+          <TerminatePartyButton />
+          <QuiteLeavePartyButton />
+        </div>
+      )}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import {create} from "zustand";
 import {
   AnecdoteInterface,
   FullPartyUserType,
+  IAnecdoteToGuess,
   IParty,
   PartyMemberInterface,
 } from "@/api/parties/types";
@@ -17,6 +18,7 @@ type PartyStoreState = {
   party: IParty | null;
   userInfos: PartyMemberInterface | null;
   anecdotes: AnecdoteInterface[] | null;
+  anecdotesToGuess: IAnecdoteToGuess[] | null;
   members: FullPartyUserType[] | null;
 };
 
@@ -32,6 +34,7 @@ const useParty = create<PartyStore>((set, get) => ({
   party: null,
   userInfos: null,
   anecdotes: null,
+  anecdotesToGuess: null,
   members: null,
   computed: {
     isOwner: () => get().party?.ownerUid === useUser.getState().user?.uid,
