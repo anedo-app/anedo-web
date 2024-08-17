@@ -36,12 +36,12 @@ const PartyEndedModule: React.FC = () => {
           tabs={[
             {
               label: "Inspecteurs",
-              value: "classement",
+              value: "detectives",
               content: <DetectivesList detectives={inspecteurs || []} />,
             },
             {
               label: "Menteurs pro",
-              value: "classement",
+              value: "liers",
               content: <ProLier members={liers || []} />,
             },
           ]}

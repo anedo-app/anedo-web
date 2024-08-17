@@ -11,6 +11,7 @@ import PartyStartedModule from "../PartyStartedModule";
 import TerminatePartyButton from "./components/TerminatePartyButton";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
 import {toast} from "react-toastify";
+import {IParty} from "@/api/parties/types";
 import {BookOpenIcon, CopyIcon} from "@/Icons";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {getAllPartyMembers, getParty, getUserPartyInfos} from "@/api/parties";
@@ -28,8 +29,8 @@ const PartyModule: React.FC = () => {
       if (!partyId) return;
       const partyData = await getParty(partyId);
       setPartyData("party", partyData);
-
       setLoading(false);
+      return partyData;
     } catch (e) {
       console.error(e);
       toast.error("Une erreur est survenue pour récupérer la partie.");
@@ -37,12 +38,19 @@ const PartyModule: React.FC = () => {
     }
   };
 
-  const fetchUserPartyInfos = async (quiet: boolean = false) => {
+  const fetchUserPartyInfos = async ({
+    quiet = false,
+    party,
+  }: {
+    quiet?: boolean;
+    party?: IParty;
+  }) => {
     try {
-      if (!partyId) return;
+      const id = party?.id || partyId;
+      if (!id) return;
       if (!quiet && !party) setLoadingUser(true);
       const {userInfo, anecdotes, anecdotesToGuess} =
-        await getUserPartyInfos(partyId);
+        await getUserPartyInfos(id);
       setPartyData("userInfos", userInfo);
       setPartyData("anecdotes", anecdotes);
       setPartyData("anecdotesToGuess", anecdotesToGuess);
@@ -53,7 +61,7 @@ const PartyModule: React.FC = () => {
     }
   };
 
-  const fetchMembers = async () => {
+  const fetchMembers = async (party?: IParty) => {
     if (!party?.id) return;
 
     const members = await getAllPartyMembers(party.id, party.membersUid);
@@ -61,11 +69,15 @@ const PartyModule: React.FC = () => {
     setPartyData("members", members);
   };
 
-  useEffect(() => {
+  const fetchAll = async () => {
     if (!party) setLoading(true);
-    fetchParty();
-    fetchUserPartyInfos();
-    fetchMembers();
+    const fetchedParty = await fetchParty();
+    fetchUserPartyInfos({party: fetchedParty});
+    fetchMembers(fetchedParty);
+  };
+
+  useEffect(() => {
+    fetchAll();
   }, []);
 
   if (!partyId) return <Navigate to={"/"} replace />;
@@ -116,7 +128,7 @@ const PartyModule: React.FC = () => {
                     <Anecdote
                       anecdote={a}
                       key={a.type + i}
-                      onSubmit={() => fetchUserPartyInfos(true)}
+                      onSubmit={() => fetchUserPartyInfos({quiet: true})}
                     />
                   ))}
                 </div>

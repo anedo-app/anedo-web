@@ -14,6 +14,7 @@ const ProLier: React.FC<{members: FullPartyUserType[]}> = ({members}) => {
           member={d}
           highlight
           info="Est resté incognito jusqu’au bout"
+          key={d.uid}
         />
       ))}
       <div className="flex items-center gap-2 text-black-100">
@@ -22,7 +23,7 @@ const ProLier: React.FC<{members: FullPartyUserType[]}> = ({members}) => {
         <span className="h-px w-full bg-current" />
       </div>
       {rankedMembers.map((d, i) => (
-        <RankedPlayer member={d} rank={i + 2} />
+        <RankedPlayer member={d} rank={i + 2} key={d.uid} />
       ))}
     </div>
   );
