@@ -4,6 +4,7 @@ import useUser from "@/hooks/useUser";
 import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
 import NavBar from "@/components/NavBar";
+import PartyCard from "./components/PartyCard";
 import React, {useEffect, useState} from "react";
 import NewPartyModal from "./components/NewPartyModal";
 import JoinPartyModal from "./components/JoinPartyModal";
@@ -47,15 +48,19 @@ const HomeModule: React.FC = () => {
           description="Rejoignez une partie en utilisant le code et partagez vos anecdotes !"
           onClick={() => setIsJoinModalOpen(true)}
         />
-        {parties.map((party) => (
-          <Tile
-            key={party.id}
-            title={party.name}
-            description="Partie en cours"
-            onClick={() => navigate(`/party/${party.id}`)}
-          />
-        ))}
       </div>
+      {!!parties?.length && (
+        <div className="flex flex-col gap-4">
+          <h2 className="text-title">T'es parties</h2>
+          {parties.map((party) => (
+            <PartyCard
+              key={party.id}
+              party={party}
+              onClick={() => navigate(`/party/${party.id}`)}
+            />
+          ))}
+        </div>
+      )}
       <div className="flex w-full justify-between">
         <Button icon={RewindLeftIcon} disabled>
           Archives

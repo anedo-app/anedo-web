@@ -31,7 +31,8 @@
     border-color: $black-85;
   }
 
-  &:active:not(&.disabled, &.loading) {
+  &:active:not(&.disabled, &.loading),
+  &.pushed {
     margin-top: 4px;
     border-bottom-width: 2px;
   }

@@ -14,6 +14,7 @@ export interface TileProps {
   icon?: React.FC<IIconProps>;
   children?: React.ReactNode;
   disabled?: boolean;
+  pushed?: boolean;
   small?: boolean;
   onClick: () => void;
   className?: string;

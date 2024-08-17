@@ -30,7 +30,7 @@ const QuitePartyModal: React.FC<{
       title="Quitter la partie en cours ?"
       onClose={onClose}
       isOpen={isOpen}
-      className="flex flex-col gap-8"
+      className="flex flex-col gap-8 text-center"
       closable={!loading}
       buttons={
         <>

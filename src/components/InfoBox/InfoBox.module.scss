@@ -9,11 +9,16 @@
   background-color: $cream-100;
   border: solid 1px $black-100;
   border-radius: 8px;
+
+  .icon {
+    flex-shrink: 0;
+  }
 }
 
 .content {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: 4px;
 
   h4 {

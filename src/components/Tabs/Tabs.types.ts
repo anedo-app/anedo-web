@@ -13,6 +13,6 @@ export interface Tab {
 export interface TabsProps {
   tabs: Tab[];
   currentTab?: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   className?: string;
 }

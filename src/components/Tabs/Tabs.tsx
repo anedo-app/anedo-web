@@ -20,7 +20,7 @@ const Tabs: React.FC<TabsProps> = ({className, tabs, onChange}) => {
             pushed={activeTab === index}
             onClick={() => {
               setActiveTab(index);
-              onChange(tab.value);
+              onChange?.(tab.value);
             }}
           >
             <p>{tab.label}</p>
