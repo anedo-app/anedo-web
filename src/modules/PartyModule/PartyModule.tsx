@@ -34,14 +34,37 @@ const PartyModule: React.FC = () => {
 
   const [partyStartedModalOpen, setPartyStartedModalOpen] = useState(false);
 
-  const fetchParty = async () => {
+  useEffect(() => {
     if (!partyId) return;
+
+    const unSubscribe = listenParty(partyId, (party) => {
+      setPartyData("party", party);
+      setPartyStartedModalOpen(party.isStarted && !userInfos?.startedPlaying);
+      fetchUserPartyInfos(party);
+      fetchMembers(party);
+    });
+
+    const unSubscribeMembers = listenPartyMembers(partyId, (members) => {
+      setPartyData("members", members);
+      if (party) fetchUserPartyInfos(party);
+    });
+
+    fetchAll();
+    return () => {
+      unSubscribe();
+      unSubscribeMembers();
+    };
+  }, []);
+
+  if (!partyId) return <Navigate to={"/"} replace />;
+
+  const fetchParty = async () => {
     const partyData = await getParty(partyId);
     setPartyData("party", partyData);
     return partyData;
   };
 
-  const fetchUserPartyInfos = async ({party}: {party?: IParty}) => {
+  const fetchUserPartyInfos = async (party: IParty) => {
     const id = party?.id || partyId;
     if (!id) return;
     const {userInfo, anecdotes, anecdotesToGuess} = await getUserPartyInfos(id);
@@ -66,7 +89,7 @@ const PartyModule: React.FC = () => {
     if (!party) setLoading(true);
     try {
       const fetchedParty = await fetchParty();
-      await fetchUserPartyInfos({party: fetchedParty});
+      await fetchUserPartyInfos(fetchedParty);
       setLoading(false);
 
       fetchMembers(fetchedParty);
@@ -76,29 +99,6 @@ const PartyModule: React.FC = () => {
       navigate("/");
     }
   };
-
-  useEffect(() => {
-    if (!partyId) return;
-
-    const unSubscribe = listenParty(partyId, (party) => {
-      setPartyData("party", party);
-      setPartyStartedModalOpen(party.isStarted && !userInfos?.startedPlaying);
-      fetchUserPartyInfos({party});
-      fetchMembers(party);
-    });
-
-    const unSubscribeMembers = listenPartyMembers(partyId, (members) => {
-      setPartyData("members", members);
-    });
-
-    fetchAll();
-    return () => {
-      unSubscribe();
-      unSubscribeMembers();
-    };
-  }, []);
-
-  if (!partyId) return <Navigate to={"/"} replace />;
 
   if (loading || party === null)
     return (

@@ -194,9 +194,7 @@ export const deleteParty = async (partyId: string) => {
 export const startParty = async (partyId: string) => {
   const shuffleAnecdotes = httpsCallableFromURL(
     functions,
-    import.meta.env.VITE_FUNCTIONS_BASE_URL +
-      "shuffleAnecdotes?partyId=" +
-      partyId,
+    "https://shuffleanecdotes-dgp2elftrq-uc.a.run.app?partyId=" + partyId,
   );
   await shuffleAnecdotes({partyId});
   await updateDoc(doc(db, "parties", partyId), {isStarted: true});
@@ -353,7 +351,7 @@ export const makeAGuess = async (payload: {
     {
       type: "too-early" | "correct" | "incorrect";
     }
-  >(functions, import.meta.env.VITE_FUNCTIONS_BASE_URL + "makeAGuess");
+  >(functions, "https://makeaguess-dgp2elftrq-uc.a.run.app");
   const {data} = await makeAGuessApi({guesserUid: userId, ...payload});
   return data;
 };
