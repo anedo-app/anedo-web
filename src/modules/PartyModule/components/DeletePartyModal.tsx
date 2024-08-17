@@ -29,7 +29,7 @@ const DeletePartyModal: React.FC<{
       title="Supprimer la partie en cours ?"
       onClose={onClose}
       isOpen={isOpen}
-      className="flex flex-col gap-8 text-center"
+      className="flex flex-col gap-8"
       closable={!loading}
       buttons={
         <>

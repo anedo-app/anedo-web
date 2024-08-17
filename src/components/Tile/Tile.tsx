@@ -7,7 +7,6 @@ const Tile: React.FC<TileProps> = ({
   className,
   onClick,
   disabled,
-  pushed,
   description,
   title,
   children,
@@ -22,7 +21,7 @@ const Tile: React.FC<TileProps> = ({
     {
       [style.disabled]: disabled,
       [style.small]: small,
-      [style.pushed]: disabled || pushed,
+      [style.keyDown]: disabled,
     },
   ]);
 

@@ -6,10 +6,9 @@ import {AnecdoteInterface} from "@/api/parties/types";
 
 const Anecdote: React.FC<{
   anecdote: AnecdoteInterface;
-  onSubmit?: (a: string) => void;
+  onSubmit: (a: string) => void;
   className?: string;
-  canEdit?: boolean;
-}> = ({anecdote, onSubmit, canEdit = true, className = ""}) => {
+}> = ({anecdote, onSubmit, className = ""}) => {
   const {type, value} = anecdote;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,7 +20,7 @@ const Anecdote: React.FC<{
         <p className="font-bold">
           {type === "false" ? "Anecdote fausse" : "Anecdote vraie"}
         </p>
-        {value && canEdit && (
+        {value && (
           <Button
             className="absolute right-0"
             size="small"
@@ -30,14 +29,14 @@ const Anecdote: React.FC<{
           />
         )}
       </div>
-      {value || !onSubmit ? (
+      {value ? (
         <p className="text-small-title whitespace-break-spaces break-words w-full">
           {value}
         </p>
       ) : (
         <Button onClick={() => setIsModalOpen(true)}>Completer</Button>
       )}
-      {isModalOpen && onSubmit && (
+      {isModalOpen && (
         <NewAnecdoteModal
           anecdote={anecdote}
           isOpen={isModalOpen}

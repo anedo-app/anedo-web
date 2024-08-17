@@ -51,7 +51,7 @@ describe("Tile disabled", () => {
 
     expect(tile.getByText(title)).toBeDefined();
     expect(tile.getByRole(TileRolesEnum.TILE).className).toContain("disabled");
-    expect(tile.getByRole(TileRolesEnum.TILE).className).toContain("pushed");
+    expect(tile.getByRole(TileRolesEnum.TILE).className).toContain("keyDown");
   });
 
   test<LocalTestContext>("should prevent click", async ({wrapper}) => {

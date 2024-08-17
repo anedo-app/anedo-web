@@ -1,16 +1,14 @@
 import Auth from "../Auth";
 import db from "@/api/firestore";
-import functions from "../functions";
 import {customAlphabet, nanoid} from "nanoid";
 import {getMultipleUsers, getUser} from "../users";
-import {httpsCallableFromURL} from "firebase/functions";
 import {
   AnecdoteInterface,
   FullPartyUserType,
-  IAnecdoteToGuess,
   IParty,
   PartyMemberInterface,
 } from "./types";
+// import functions from "../functions";
 import {
   arrayRemove,
   arrayUnion,
@@ -63,7 +61,6 @@ const addPartyMember = async (
   anecdotes: AnecdoteInterface[],
 ) => {
   await setDoc(doc(db, "parties", partyId, "anecdotes", member.uid), {
-    uid: member.uid,
     anecdotes,
   });
   await setDoc(doc(db, "parties", partyId, "members", member.uid), member);
@@ -79,7 +76,7 @@ export const createParty = async (name: string): Promise<string | void> => {
       id,
       name,
       isStarted: false,
-      isFinished: false,
+      canStart: false,
       membersUid: [ownerUid],
       ownerUid,
     };
@@ -189,23 +186,11 @@ export const deleteParty = async (partyId: string) => {
   await deleteDoc(doc(db, "parties", partyId));
 };
 
-export const startParty = async (partyId: string) => {
-  const shuffleAnecdotes = httpsCallableFromURL(
-    functions,
-    import.meta.env.VITE_FUNCTIONS_BASE_URL +
-      "shuffleAnecdotes?partyId=" +
-      partyId,
-  );
-  await shuffleAnecdotes({partyId});
-  await updateDoc(doc(db, "parties", partyId), {isStarted: true});
-};
-
 export const getUserPartyInfos = async (
   partyId: string,
   userUid?: string,
 ): Promise<{
   anecdotes: AnecdoteInterface[];
-  anecdotesToGuess: IAnecdoteToGuess[];
   userInfo: PartyMemberInterface;
 }> => {
   const id = userUid || (Auth.auth.currentUser?.uid as string);
@@ -214,17 +199,15 @@ export const getUserPartyInfos = async (
     doc(db, "parties", partyId, "members", id),
   );
   const userAnecdotesSnap = await getAnecdotes(partyId);
-  const anecdotesToGuess = await getAnecdotesToAnswer(partyId, id);
 
   return {
     anecdotes: userAnecdotesSnap,
-    anecdotesToGuess: anecdotesToGuess || null,
     userInfo: userPartyInfoSnap.data() as PartyMemberInterface,
   };
 };
 
-export const getAnecdotes = async (partyId: string, uid?: string) => {
-  const userId = uid || Auth.auth.currentUser?.uid;
+export const getAnecdotes = async (partyId: string) => {
+  const userId = Auth.auth.currentUser?.uid;
   if (!userId) throw new Error("User not found");
 
   const docSnap = await getDoc(
@@ -247,7 +230,7 @@ export const addAnecdote = async (
 
   await setDoc(
     doc(db, "parties", partyId, "anecdotes", userId),
-    {anecdotes, uid: userId},
+    {anecdotes},
     {merge: true},
   );
   await updateDoc(doc(db, "parties", partyId, "members", userId), {
@@ -282,48 +265,4 @@ export const getAllPartyMembers = async (
   })) as FullPartyUserType[];
 
   return result;
-};
-
-export const getAnecdotesToAnswer = async (
-  partyId: string,
-  memberUid: string,
-): Promise<IAnecdoteToGuess[]> => {
-  const docRef = doc(
-    db,
-    "parties",
-    partyId,
-    "anecdotesToGuess",
-    memberUid,
-  ).withConverter({
-    toFirestore: () => ({}),
-    fromFirestore: (snapshot) => snapshot.data().anecdotes,
-  });
-  const docSnap = await getDoc(docRef);
-
-  return docSnap.data();
-};
-
-export const makeAGuess = async (payload: {
-  partyId: string;
-  anecdotesOwnerUid: string;
-  anecdoteId: string;
-}): Promise<{
-  type: "too-early" | "correct" | "incorrect";
-}> => {
-  const userId = Auth.auth.currentUser?.uid;
-  if (!userId) throw new Error("User not found");
-
-  const makeAGuessApi = httpsCallableFromURL<
-    {
-      partyId: string;
-      guesserUid: string;
-      anecdotesOwnerUid: string;
-      anecdoteId: string;
-    },
-    {
-      type: "too-early" | "correct" | "incorrect";
-    }
-  >(functions, import.meta.env.VITE_FUNCTIONS_BASE_URL + "makeAGuess");
-  const {data} = await makeAGuessApi({guesserUid: userId, ...payload});
-  return data;
 };

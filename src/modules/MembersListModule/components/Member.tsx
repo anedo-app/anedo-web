@@ -9,8 +9,7 @@ const Member: React.FC<{
   member: FullPartyUserType;
   isOwner: boolean;
   isCurrentUser: boolean;
-  isPartyStarted?: boolean;
-}> = ({member, isOwner, isCurrentUser, isPartyStarted}) => {
+}> = ({member, isOwner, isCurrentUser}) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -18,17 +17,14 @@ const Member: React.FC<{
       <div className="flex w-full items-center gap-2">
         <Avatar
           src={member.photoURL || ""}
-          variant={
-            isPartyStarted ? "primary" : member.isReady ? "ready" : "waiting"
-          }
+          variant={member.isReady ? "ready" : "waiting"}
         />
         <p>{member.displayName}</p>
-        {!isPartyStarted &&
-          (member.isReady ? (
-            <CheckmarkIcon className="fill-green-100 size-6" />
-          ) : (
-            <LoaderIcon className="fill-yellow-100 size-6" />
-          ))}
+        {member.isReady ? (
+          <CheckmarkIcon className="fill-green-100 size-6" />
+        ) : (
+          <LoaderIcon className="fill-yellow-100 size-6" />
+        )}
       </div>
       {/* TODO: hidden for now */}
       {false && isOwner && !isCurrentUser && (

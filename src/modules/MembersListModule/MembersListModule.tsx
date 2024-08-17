@@ -6,14 +6,14 @@ import NavBar from "@/components/NavBar";
 import Member from "./components/Member";
 
 const MembersListModule: React.FC = () => {
-  const {members, computed, party} = useParty();
+  const {members, computed} = useParty();
   const {user} = useUser();
   const isOwner = computed.isOwner();
 
   const [filter, setFilter] = useState("all");
 
   const filteredMembers = members?.filter((member) => {
-    if (filter === "all" || party?.isStarted) return true;
+    if (filter === "all") return true;
     if (filter === "ready") return member.isReady;
     if (filter === "waiting") return !member.isReady;
     return true;
@@ -22,25 +22,23 @@ const MembersListModule: React.FC = () => {
   return (
     <div className="flex flex-col gap-8 h-full">
       <NavBar leftAction="back" name="Les joueurs" />
-      {!party?.isStarted && (
-        <Tabs
-          onChange={setFilter}
-          className="w-full"
-          tabs={[
-            {label: "Tous", value: "all", notification: members?.length},
-            {
-              label: "Prêts",
-              value: "ready",
-              notification: members?.filter((member) => member.isReady).length,
-            },
-            {
-              label: "Réfléchissent",
-              value: "waiting",
-              notification: members?.filter((member) => !member.isReady).length,
-            },
-          ]}
-        />
-      )}
+      <Tabs
+        onChange={setFilter}
+        className="w-full"
+        tabs={[
+          {label: "Tous", value: "all", notification: members?.length},
+          {
+            label: "Prêts",
+            value: "ready",
+            notification: members?.filter((member) => member.isReady).length,
+          },
+          {
+            label: "Réfléchissent",
+            value: "waiting",
+            notification: members?.filter((member) => !member.isReady).length,
+          },
+        ]}
+      />
       <div className="flex flex-col gap-4 overflow-auto -my-8 -mx-6  py-8 px-8">
         {filteredMembers?.map((member) => (
           <Member
@@ -48,7 +46,6 @@ const MembersListModule: React.FC = () => {
             member={member}
             isOwner={isOwner}
             isCurrentUser={member.uid === user?.uid}
-            isPartyStarted={party?.isStarted}
           />
         ))}
       </div>

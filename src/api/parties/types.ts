@@ -5,20 +5,11 @@ export interface AnecdoteInterface {
   type: "true" | "false";
   value: string;
 }
-
-export interface IAnecdoteToGuess extends AnecdoteInterface {
-  type: never;
-}
-
 export interface PartyMemberInterface {
   uid: string;
   isReady: boolean;
   isHost: boolean;
   guessed: boolean;
-  busted: boolean;
-  nextGuessTime?: number;
-  guessedAt?: number;
-  bustedAt?: number;
 }
 
 export type FullPartyUserType = PartyMemberInterface & IUser;
@@ -27,7 +18,7 @@ export type IParty = {
   id: string;
   name: string;
   isStarted: boolean;
-  isFinished: boolean;
+  canStart: boolean;
   membersUid: string[];
   ownerUid: string;
 };
