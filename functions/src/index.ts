@@ -6,7 +6,6 @@ import {
   PartyAnecdoteInterface,
 } from "./types";
 import {onRequest} from "firebase-functions/v2/https";
-import {log} from "firebase-functions/logger";
 
 admin.initializeApp();
 
@@ -106,8 +105,6 @@ export const makeAGuess = onRequest({cors: true}, async (req, res) => {
 
   const user = userSnapshot.data();
 
-  log(user?.nextGuessTime);
-
   if (user?.nextGuessTime) {
     const formattedDate = new Date(user.nextGuessTime);
     if (formattedDate.getTime() > Date.now())
@@ -151,7 +148,12 @@ export const makeAGuess = onRequest({cors: true}, async (req, res) => {
   await db
     .collection(`parties/${payload.partyId}/members`)
     .doc(payload.guesserUid)
-    .update({guessed: true});
+    .update({guessed: true, guessedAt: Date.now()});
+
+  await db
+    .collection(`parties/${payload.partyId}/members`)
+    .doc(payload.anecdotesOwnerUid)
+    .update({busted: true, bustedAt: Date.now()});
 
   return res.status(200).send({data: {code: 200, type: "correct"}});
 });
