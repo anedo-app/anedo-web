@@ -15,6 +15,7 @@ export interface PartyMemberInterface {
   isReady: boolean;
   isHost: boolean;
   guessed: boolean;
+  startedPlaying: boolean;
   busted?: boolean;
   nextGuessTime?: number;
   guessedAt?: number;

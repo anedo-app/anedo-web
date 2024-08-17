@@ -8,6 +8,7 @@ import MembersList from "./components/MembersList";
 import StartButton from "./components/StartButton";
 import PartyEndedModule from "../PartyEndedModule";
 import PartyStartedModule from "../PartyStartedModule";
+import PartyStartedModal from "./components/PartyStartedModal";
 import TerminatePartyButton from "./components/TerminatePartyButton";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
 import {toast} from "react-toastify";
@@ -20,51 +21,37 @@ import {
   getUserPartyInfos,
   listenParty,
   listenPartyMembers,
+  setPartyMemberInfos,
 } from "@/api/parties";
 
 const PartyModule: React.FC = () => {
   const navigate = useNavigate();
   const {partyId} = useParams();
-  const {party, anecdotes, setPartyData} = useParty();
+  const {party, anecdotes, userInfos, setPartyData} = useParty();
 
   const [loading, setLoading] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
 
+  const [partyStartedModalOpen, setPartyStartedModalOpen] = useState(false);
+
   const fetchParty = async () => {
-    try {
-      if (!partyId) return;
-      const partyData = await getParty(partyId);
-      setPartyData("party", partyData);
-      setLoading(false);
-      return partyData;
-    } catch (e) {
-      console.error(e);
-      toast.error("Une erreur est survenue pour récupérer la partie.");
-      navigate("/");
-    }
+    if (!partyId) return;
+    const partyData = await getParty(partyId);
+    setPartyData("party", partyData);
+    return partyData;
   };
 
-  const fetchUserPartyInfos = async ({
-    quiet = false,
-    party,
-  }: {
-    quiet?: boolean;
-    party?: IParty;
-  }) => {
-    try {
-      const id = party?.id || partyId;
-      if (!id) return;
-      if (!quiet && !party) setLoadingUser(true);
-      const {userInfo, anecdotes, anecdotesToGuess} =
-        await getUserPartyInfos(id);
-      setPartyData("userInfos", userInfo);
-      setPartyData("anecdotes", anecdotes);
-      setPartyData("anecdotesToGuess", anecdotesToGuess);
-      setLoadingUser(false);
-    } catch (e) {
-      setLoadingUser(false);
-      console.error(e);
-    }
+  const fetchUserPartyInfos = async ({party}: {party?: IParty}) => {
+    const id = party?.id || partyId;
+    if (!id) return;
+    const {userInfo, anecdotes, anecdotesToGuess} = await getUserPartyInfos(id);
+    setPartyData("userInfos", userInfo);
+    setPartyData("anecdotes", anecdotes);
+    setPartyData("anecdotesToGuess", anecdotesToGuess);
+    setPartyStartedModalOpen(
+      (party?.isStarted && !userInfo?.startedPlaying) || false,
+    );
+    setLoadingUser(false);
   };
 
   const fetchMembers = async (party?: IParty) => {
@@ -77,9 +64,17 @@ const PartyModule: React.FC = () => {
 
   const fetchAll = async () => {
     if (!party) setLoading(true);
-    const fetchedParty = await fetchParty();
-    fetchUserPartyInfos({party: fetchedParty});
-    fetchMembers(fetchedParty);
+    try {
+      const fetchedParty = await fetchParty();
+      await fetchUserPartyInfos({party: fetchedParty});
+      setLoading(false);
+
+      fetchMembers(fetchedParty);
+    } catch (e) {
+      console.error(e);
+      toast.error("Une erreur est survenue pour récupérer la partie.");
+      navigate("/");
+    }
   };
 
   useEffect(() => {
@@ -87,6 +82,7 @@ const PartyModule: React.FC = () => {
 
     const unSubscribe = listenParty(partyId, (party) => {
       setPartyData("party", party);
+      setPartyStartedModalOpen(party.isStarted && !userInfos?.startedPlaying);
       fetchUserPartyInfos({party});
       fetchMembers(party);
     });
@@ -112,7 +108,7 @@ const PartyModule: React.FC = () => {
     );
 
   return (
-    <div className="h-full flex flex-col justify-between gap-6">
+    <div className="h-full flex flex-col justify-between gap-6 pb-8">
       <NavBar
         leftAction="home"
         rightAction={
@@ -150,7 +146,7 @@ const PartyModule: React.FC = () => {
                     <Anecdote
                       anecdote={a}
                       key={a.type + i}
-                      onSubmit={() => fetchUserPartyInfos({quiet: true})}
+                      onSubmit={() => null}
                     />
                   ))}
                 </div>
@@ -163,6 +159,18 @@ const PartyModule: React.FC = () => {
           <TerminatePartyButton />
           <QuiteLeavePartyButton />
         </div>
+      )}
+
+      {partyStartedModalOpen && (
+        <PartyStartedModal
+          isOpen={partyStartedModalOpen}
+          onClose={() => {
+            setPartyMemberInfos(party.id, userInfos?.uid || "", {
+              startedPlaying: true,
+            });
+            setPartyStartedModalOpen(false);
+          }}
+        />
       )}
     </div>
   );

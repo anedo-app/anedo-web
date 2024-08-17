@@ -1,6 +1,6 @@
-import React, {useMemo} from "react";
 import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
+import React, {useMemo, useState} from "react";
 import {toast} from "react-toastify";
 import {PlayCircleIcon} from "@/Icons";
 import {startParty} from "@/api/parties";
@@ -16,20 +16,24 @@ const StartButton: React.FC = () => {
   const isOwner = useParty((s) => s.computed.isOwner);
   const computedIsOwner = isOwner();
 
+  const [loading, setLoading] = useState(false);
+
   const canStart = useMemo(
     () => members?.every((m) => m.isReady) && members?.length > 1,
     [members],
   );
 
   const onStart = async () => {
+    setLoading(true);
     try {
       if (partyId) {
         await startParty(partyId);
-        toast.success("La partie a été lancée !");
       }
     } catch (e) {
       console.error(e);
       toast.error("Erreur lors du lancement de la partie");
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -41,6 +45,7 @@ const StartButton: React.FC = () => {
             disabled={!canStart}
             icon={PlayCircleIcon}
             onClick={onStart}
+            loading={loading}
           >
             Lancer la partie
           </Button>

@@ -58,7 +58,7 @@ export const shuffleAnecdotes = onRequest({cors: true}, async (req, res) => {
   if (anecdotesDocuments.length === 0)
     return res.json({status: 404, message: "No members found"});
 
-  if (anecdotesDocuments.length === 2)
+  if (anecdotesDocuments.length === 1)
     return res.json({status: 403, message: "Not enough members"});
 
   const anecdotes = (await Promise.all(

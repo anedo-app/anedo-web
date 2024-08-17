@@ -56,6 +56,7 @@ const getNewPartyMember = (
   isHost,
   isReady: false,
   guessed: false,
+  startedPlaying: false,
 });
 
 const addPartyMember = async (
@@ -256,12 +257,25 @@ export const addAnecdote = async (
   });
 };
 
-export const getPartyMember = async (partyId: string, memberUid: string) => {
+export const getPartyMember = async (
+  partyId: string,
+  memberUid: string,
+): Promise<FullPartyUserType> => {
   const memberPersonalInfos = await getUser(memberUid);
   const memberStatus = await getDoc(
     doc(db, "parties", partyId, "members", memberUid),
   );
-  return {...memberStatus.data(), ...memberPersonalInfos};
+  return {...memberStatus.data(), ...memberPersonalInfos} as FullPartyUserType;
+};
+
+export const setPartyMemberInfos = async (
+  partyId: string,
+  memberUid: string,
+  data: Partial<PartyMemberInterface>,
+): Promise<void> => {
+  await setDoc(doc(db, "parties", partyId, "members", memberUid), data, {
+    merge: true,
+  });
 };
 
 export const getAllPartyMembers = async (
