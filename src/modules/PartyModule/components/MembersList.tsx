@@ -5,12 +5,9 @@ import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
 import {EyeIcon} from "@/Icons";
 import {useNavigate} from "react-router-dom";
-import {useShallow} from "zustand/react/shallow";
 
 const MembersList: React.FC = () => {
   const navigate = useNavigate();
-
-  const membersUid = useParty(useShallow((s) => s.party?.membersUid));
   const {party, members} = useParty();
 
   const tagContent = () => {
@@ -19,8 +16,8 @@ const MembersList: React.FC = () => {
         ? `${members.filter((m) => m.guessed).length} / ${members.length} trouvées`
         : "Calculs...";
 
-    return membersUid && membersUid?.length > 1
-      ? `${membersUid.length} prêts`
+    return members && members?.length > 1
+      ? `${members.filter((m) => m.isReady).length} / ${members.length} prêts`
       : "En attente";
   };
 

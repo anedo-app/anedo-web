@@ -1,6 +1,7 @@
 import Auth from "../Auth";
 import db from "@/api/firestore";
 import functions from "../functions";
+import {IUser} from "@/hooks/useUser";
 import {customAlphabet, nanoid} from "nanoid";
 import {getMultipleUsers, getUser} from "../users";
 import {httpsCallableFromURL} from "firebase/functions";
@@ -128,13 +129,13 @@ export const getParties = async (uid?: string): Promise<DocumentData[]> => {
   }
 };
 
-export const listenParties = (
-  uid: string,
-  callback: (parties: IParty[]) => void,
-) => {
+export const listenParties = (callback: (parties: IParty[]) => void) => {
+  const userId = Auth.auth.currentUser?.uid;
+  if (!userId) return;
+
   const q = query(
     collection(db, "parties"),
-    where("membersUid", "array-contains", uid),
+    where("membersUid", "array-contains", userId),
   );
 
   return onSnapshot(q, (querySnapshot) => {
@@ -283,6 +284,21 @@ export const getAllPartyMembers = async (
 
   return result;
 };
+
+export const listenPartyMembers = (
+  partyUid: string,
+  callback: (partyUsers: FullPartyUserType[]) => void,
+) =>
+  onSnapshot(
+    collection(db, "parties", partyUid, "members"),
+    async (querySnapshot) => {
+      const membersStatus: IUser[] = [];
+      querySnapshot.forEach((doc) => membersStatus.push(doc.data() as IUser));
+      const membersUids = membersStatus.map((member) => member.uid);
+
+      callback(await getAllPartyMembers(partyUid, membersUids));
+    },
+  );
 
 export const getAnecdotesToAnswer = async (
   partyId: string,

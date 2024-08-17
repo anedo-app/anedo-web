@@ -1,6 +1,5 @@
 import useApp from "@/hooks/useApp";
 import Tile from "@/components/Tile";
-import useUser from "@/hooks/useUser";
 import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
 import NavBar from "@/components/NavBar";
@@ -8,13 +7,12 @@ import PartyCard from "./components/PartyCard";
 import React, {useEffect, useState} from "react";
 import NewPartyModal from "./components/NewPartyModal";
 import JoinPartyModal from "./components/JoinPartyModal";
-import {getParties} from "@/api/parties";
+import {listenParties} from "@/api/parties";
 import {useNavigate} from "react-router-dom";
 import {BookOpenIcon, RewindLeftIcon, UserIcon} from "@/Icons";
 
 const HomeModule: React.FC = () => {
   const navigate = useNavigate();
-  const {user} = useUser();
   const {setAppData, parties} = useApp();
   const {setPartyData} = useParty();
 
@@ -24,9 +22,7 @@ const HomeModule: React.FC = () => {
   useEffect(() => {
     setPartyData("party", null);
 
-    getParties(user?.uid).then((parties) => {
-      setAppData("parties", parties);
-    });
+    listenParties((parties) => setAppData("parties", parties));
   }, []);
 
   return (

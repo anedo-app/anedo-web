@@ -14,7 +14,13 @@ import {toast} from "react-toastify";
 import {IParty} from "@/api/parties/types";
 import {BookOpenIcon, CopyIcon} from "@/Icons";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
-import {getAllPartyMembers, getParty, getUserPartyInfos} from "@/api/parties";
+import {
+  getAllPartyMembers,
+  getParty,
+  getUserPartyInfos,
+  listenParty,
+  listenPartyMembers,
+} from "@/api/parties";
 
 const PartyModule: React.FC = () => {
   const navigate = useNavigate();
@@ -77,7 +83,23 @@ const PartyModule: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!partyId) return;
+
+    const unSubscribe = listenParty(partyId, (party) => {
+      setPartyData("party", party);
+      fetchUserPartyInfos({party});
+      fetchMembers(party);
+    });
+
+    const unSubscribeMembers = listenPartyMembers(partyId, (members) => {
+      setPartyData("members", members);
+    });
+
     fetchAll();
+    return () => {
+      unSubscribe();
+      unSubscribeMembers();
+    };
   }, []);
 
   if (!partyId) return <Navigate to={"/"} replace />;
