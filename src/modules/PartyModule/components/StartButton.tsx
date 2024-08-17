@@ -16,7 +16,10 @@ const StartButton: React.FC = () => {
   const isOwner = useParty((s) => s.computed.isOwner);
   const computedIsOwner = isOwner();
 
-  const canStart = useMemo(() => members?.every((m) => m.isReady), [members]);
+  const canStart = useMemo(
+    () => members?.every((m) => m.isReady) && members?.length > 1,
+    [members],
+  );
 
   const onStart = async () => {
     try {
