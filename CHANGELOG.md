@@ -1,3 +1,14 @@
+# [1.3.0](https://github.com/anedo-app/anedo-web/compare/v1.2.0...v1.3.0) (2024-08-17)
+
+
+### Features
+
+* **Home:** Display user parties ([62b2ece](https://github.com/anedo-app/anedo-web/commit/62b2eceeb7f1841aa1197b26a10fb16105013fd2))
+* **Party:** Add confetti to good answer and guessed screen ([8b3f3af](https://github.com/anedo-app/anedo-web/commit/8b3f3affbf47accb3e24c32cd53403ffaf30e2d8))
+* **Party:** Add party end screen with ranks ([35c31ed](https://github.com/anedo-app/anedo-web/commit/35c31ed56aeb2bf8a53e312175c9f1972b55d53d))
+* **Party:** Add party termination button for owner ([cc4140b](https://github.com/anedo-app/anedo-web/commit/cc4140b506fd67a732136edd8880c8b23ba4b604))
+* **Party:** Can make a guess ([1321cd9](https://github.com/anedo-app/anedo-web/commit/1321cd9ccda8675aee7221b167698a8e47dee4b6))
+
 # [1.2.0](https://github.com/anedo-app/anedo-web/compare/v1.1.0...v1.2.0) (2024-08-04)
 
 
