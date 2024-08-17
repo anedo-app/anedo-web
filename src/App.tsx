@@ -88,7 +88,9 @@ const App: React.FC = () => {
           autoClose={5000}
           theme="colored"
         />
-        <RouterProvider router={router} />
+        <div className="container">
+          <RouterProvider router={router} />
+        </div>
       </React.StrictMode>
       <p className="version">
         {appVersion}

@@ -3,7 +3,7 @@ import React from "react";
 
 const WaitingScreen: React.FC = () => {
   return (
-    <div className="container">
+    <div className="waitingScreen">
       <h1 className="title">Anedo app</h1>
       <p>Ça arrive fort !</p>
     </div>

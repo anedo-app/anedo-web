@@ -108,7 +108,7 @@ const PartyModule: React.FC = () => {
     );
 
   return (
-    <div className="h-full flex flex-col justify-between gap-6 pb-8">
+    <div className="h-full flex flex-col justify-between gap-6">
       <NavBar
         leftAction="home"
         rightAction={
