@@ -6,13 +6,14 @@ import Anecdote from "./components/Anecdote";
 import React, {useEffect, useState} from "react";
 import MembersList from "./components/MembersList";
 import StartButton from "./components/StartButton";
+import PartyEndedModule from "../PartyEndedModule";
 import PartyStartedModule from "../PartyStartedModule";
 import TerminatePartyButton from "./components/TerminatePartyButton";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
 import {toast} from "react-toastify";
 import {BookOpenIcon, CopyIcon} from "@/Icons";
-import {getParty, getUserPartyInfos} from "@/api/parties";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
+import {getAllPartyMembers, getParty, getUserPartyInfos} from "@/api/parties";
 
 const PartyModule: React.FC = () => {
   const navigate = useNavigate();
@@ -52,10 +53,19 @@ const PartyModule: React.FC = () => {
     }
   };
 
+  const fetchMembers = async () => {
+    if (!party?.id) return;
+
+    const members = await getAllPartyMembers(party.id, party.membersUid);
+
+    setPartyData("members", members);
+  };
+
   useEffect(() => {
     if (!party) setLoading(true);
     fetchParty();
     fetchUserPartyInfos();
+    fetchMembers();
   }, []);
 
   if (!partyId) return <Navigate to={"/"} replace />;
@@ -78,20 +88,25 @@ const PartyModule: React.FC = () => {
       <div className="grow flex-col flex gap-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-title text-center">{party.name}</h1>
-          <div className="flex gap-4 items-center justify-center">
-            <p className="text-black-100">#{party.id}</p>
-            <Button
-              size="small"
-              icon={CopyIcon}
-              onClick={() => navigator.clipboard.writeText(party.id)}
-            />
-          </div>
+          {!party.isFinished && (
+            <div className="flex gap-4 items-center justify-center">
+              <p className="text-black-100">#{party.id}</p>
+              <Button
+                size="small"
+                icon={CopyIcon}
+                onClick={() => navigator.clipboard.writeText(party.id)}
+              />
+            </div>
+          )}
         </div>
-        <MembersList />
+        {!party.isFinished && <MembersList />}
         {!party.isStarted && <StartButton />}
+
         <div className="flex flex-col gap-4">
           {!loadingUser &&
-            (party.isStarted ? (
+            (party.isFinished ? (
+              <PartyEndedModule />
+            ) : party.isStarted ? (
               <PartyStartedModule />
             ) : (
               <>
@@ -109,10 +124,12 @@ const PartyModule: React.FC = () => {
             ))}
         </div>
       </div>
-      <div className="flex gap-2 justify-center">
-        <TerminatePartyButton />
-        <QuiteLeavePartyButton />
-      </div>
+      {!party.isFinished && (
+        <div className="flex gap-2 justify-center">
+          <TerminatePartyButton />
+          <QuiteLeavePartyButton />
+        </div>
+      )}
     </div>
   );
 };

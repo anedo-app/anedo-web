@@ -223,8 +223,8 @@ export const getUserPartyInfos = async (
   };
 };
 
-export const getAnecdotes = async (partyId: string) => {
-  const userId = Auth.auth.currentUser?.uid;
+export const getAnecdotes = async (partyId: string, uid?: string) => {
+  const userId = uid || Auth.auth.currentUser?.uid;
   if (!userId) throw new Error("User not found");
 
   const docSnap = await getDoc(

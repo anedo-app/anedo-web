@@ -15,7 +15,10 @@ export interface PartyMemberInterface {
   isReady: boolean;
   isHost: boolean;
   guessed: boolean;
+  busted?: boolean;
   nextGuessTime?: number;
+  guessedAt?: number;
+  bustedAt?: number;
 }
 
 export type FullPartyUserType = PartyMemberInterface & IUser;

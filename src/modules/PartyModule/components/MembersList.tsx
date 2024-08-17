@@ -1,18 +1,17 @@
+import React from "react";
 import Tag from "@/components/Tag";
-import React, {useEffect} from "react";
 import useParty from "@/hooks/useParty";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
 import {EyeIcon} from "@/Icons";
 import {useNavigate} from "react-router-dom";
 import {useShallow} from "zustand/react/shallow";
-import {getAllPartyMembers} from "@/api/parties";
 
 const MembersList: React.FC = () => {
   const navigate = useNavigate();
 
   const membersUid = useParty(useShallow((s) => s.party?.membersUid));
-  const {party, members, setPartyData} = useParty();
+  const {party, members} = useParty();
 
   const tagContent = () => {
     if (party?.isStarted)
@@ -24,18 +23,6 @@ const MembersList: React.FC = () => {
       ? `${membersUid.length} prêts`
       : "En attente";
   };
-
-  const fetchMembers = async () => {
-    if (!membersUid || !party?.id) return;
-
-    const members = await getAllPartyMembers(party.id, membersUid);
-
-    setPartyData("members", members);
-  };
-
-  useEffect(() => {
-    fetchMembers();
-  }, [membersUid]);
 
   if (!members) return null;
 
