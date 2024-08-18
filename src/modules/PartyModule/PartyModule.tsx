@@ -18,6 +18,7 @@ import {BookOpenIcon, ShareIcon} from "@/Icons";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {
   getAllPartyMembers,
+  getAnecdotes,
   getParty,
   getUserPartyInfos,
   isUserPartOfParty,
@@ -108,6 +109,11 @@ const PartyModule: React.FC = () => {
     }
   };
 
+  const onAnecdoteSubmit = async () => {
+    const anecdotes = await getAnecdotes(partyId);
+    setPartyData("anecdotes", anecdotes);
+  };
+
   const copyShareLink = () => {
     navigator.clipboard.writeText(
       `${window.location.origin}/join/${party?.id}`,
@@ -158,7 +164,7 @@ const PartyModule: React.FC = () => {
                     <Anecdote
                       anecdote={a}
                       key={a.type + i}
-                      onSubmit={() => null}
+                      onSubmit={onAnecdoteSubmit}
                     />
                   ))}
                 </div>
