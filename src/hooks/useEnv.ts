@@ -7,7 +7,7 @@ interface useEnvReturn {
 const useEnv = (): useEnvReturn => {
   const isDev = import.meta.env.DEV;
   const isProd = import.meta.env.PROD;
-  const appVersion = import.meta.env.VITE_APP_VERSION;
+  const appVersion = __APP_VERSION__;
 
   return {isDev, isProd, appVersion};
 };
