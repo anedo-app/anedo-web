@@ -1,3 +1,4 @@
+import useUser from "@/hooks/useUser";
 import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
 import NavBar from "@/components/NavBar";
@@ -19,6 +20,7 @@ import {
   getAllPartyMembers,
   getParty,
   getUserPartyInfos,
+  isUserPartOfParty,
   listenParty,
   listenPartyMembers,
   setPartyMemberInfos,
@@ -27,6 +29,7 @@ import {
 const PartyModule: React.FC = () => {
   const navigate = useNavigate();
   const {partyId} = useParams();
+  const {user} = useUser();
   const {party, anecdotes, userInfos, setPartyData} = useParty();
 
   const [loading, setLoading] = useState(false);
@@ -88,6 +91,11 @@ const PartyModule: React.FC = () => {
   const fetchAll = async () => {
     if (!party) setLoading(true);
     try {
+      const isPartOfParty = await isUserPartOfParty(partyId, user?.uid || "");
+      if (!isPartOfParty) {
+        toast.error("Tu n'es pas membre de cette partie.");
+        return navigate("/");
+      }
       const fetchedParty = await fetchParty();
       await fetchUserPartyInfos(fetchedParty);
       setLoading(false);

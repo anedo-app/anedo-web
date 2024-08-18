@@ -148,6 +148,17 @@ export const listenParties = (callback: (parties: IParty[]) => void) => {
   });
 };
 
+export const isUserPartOfParty = async (partyId: string, userId: string) => {
+  if (!userId) return false;
+
+  const q = query(
+    collection(db, "parties"),
+    where("membersUid", "array-contains", userId),
+  );
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.some((doc) => doc.id === partyId);
+};
+
 export const listenParty = (
   partyUid: string,
   callback: (partyData: IParty) => void,
