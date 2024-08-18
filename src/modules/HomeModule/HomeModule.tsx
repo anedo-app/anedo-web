@@ -47,7 +47,7 @@ const HomeModule: React.FC = () => {
       </div>
       {!!parties?.length && (
         <div className="flex flex-col gap-4">
-          <h2 className="text-title">T'es parties</h2>
+          <h2 className="text-title">Tes parties</h2>
           {parties.map((party) => (
             <PartyCard
               key={party.id}

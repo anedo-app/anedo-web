@@ -63,19 +63,19 @@ const Rules: React.FC = () => {
         <Rule
           variant="purple"
           index={1}
-          title="La préparation"
+          title="Préparation"
           description="Tous les joueurs entrent leurs anecdotes, deux vraies et une fausse. Une fois que toutes les anecdotes ont été soumises, le maître du jeu peut lancer la partie."
         />
         <Rule
           variant="green"
           index={2}
-          title="La recherche"
+          title="Recherche"
           description="Chaque joueur se voit attribuer les trois anecdotes soumises par un autre joueur. Son objectif est de déterminer quelle anecdote est fausse parmi les trois et à qui appartiennent ces anecdotes. En cas de mauvaise réponse, le joueur doit attendre 30 minutes avant de pouvoir soumettre une nouvelle réponse."
         />
         <Rule
           variant="yellow"
           index={3}
-          title="La résolution"
+          title="Résolution"
           description="Une fois que tous les joueurs ont trouvé leurs anecdotes ou que le temps imparti est écoulé, un classement est généré et la partie se termine."
         />
       </div>

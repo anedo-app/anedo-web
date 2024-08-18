@@ -13,7 +13,7 @@ import TerminatePartyButton from "./components/TerminatePartyButton";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
 import {toast} from "react-toastify";
 import {IParty} from "@/api/parties/types";
-import {BookOpenIcon, CopyIcon} from "@/Icons";
+import {BookOpenIcon, ShareIcon} from "@/Icons";
 import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {
   getAllPartyMembers,
@@ -100,6 +100,14 @@ const PartyModule: React.FC = () => {
     }
   };
 
+  const copyShareLink = () => {
+    navigator.clipboard.writeText(
+      `${window.location.origin}/join/${party?.id}`,
+    );
+
+    toast.success("Lien copié dans le presse-papier");
+  };
+
   if (loading || party === null)
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -121,11 +129,7 @@ const PartyModule: React.FC = () => {
           {!party.isFinished && (
             <div className="flex gap-4 items-center justify-center">
               <p className="text-black-100">#{party.id}</p>
-              <Button
-                size="small"
-                icon={CopyIcon}
-                onClick={() => navigator.clipboard.writeText(party.id)}
-              />
+              <Button size="small" icon={ShareIcon} onClick={copyShareLink} />
             </div>
           )}
         </div>

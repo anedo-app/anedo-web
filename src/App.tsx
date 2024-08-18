@@ -2,6 +2,7 @@ import "react-toastify/dist/ReactToastify.css";
 import React from "react";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
+import Join from "./pages/Join";
 import Rules from "./pages/Rules";
 import Party from "./pages/Party";
 import useEnv from "./hooks/useEnv";
@@ -48,6 +49,7 @@ const AppRouter = () => {
             </AuthRoute>
           }
         />
+        <Route path="/join/:partyId" element={<Join />} />
         <Route
           path="/*"
           element={

@@ -164,9 +164,9 @@ export const updateParty = async (party: IParty) => {
   }
 };
 
-export const joinParty = async (partyId: string) => {
+export const joinParty = async (partyId: string, pUserId?: string) => {
   try {
-    const userId = Auth.auth.currentUser?.uid;
+    const userId = pUserId || Auth.auth.currentUser?.uid;
     if (!userId) throw new Error("User not found");
     await updateDoc(doc(db, "parties", partyId), {
       membersUid: arrayUnion(userId),
@@ -185,6 +185,7 @@ export const leaveParty = async (partyId: string) => {
     membersUid: arrayRemove(userId),
   });
   await deleteDoc(doc(db, "parties", partyId, "members", userId));
+  await deleteDoc(doc(db, "parties", partyId, "anecdotes", userId));
 };
 
 export const deleteParty = async (partyId: string) => {

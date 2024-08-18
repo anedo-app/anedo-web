@@ -1,8 +1,8 @@
 import AuthService from "@/api/Auth";
 import {create} from "zustand";
 import {User} from "firebase/auth";
-import {addUser} from "@/api/users";
 import {persist} from "zustand/middleware";
+import {addUser, getUser} from "@/api/users";
 
 export interface IUser {
   uid: string;
@@ -32,6 +32,14 @@ const useUser = create(
       login: async (mail, password) => {
         const firebaseUser = await AuthService.login(mail, password);
         get().setUser(firebaseUser);
+        const firestoreUser = await getUser(firebaseUser.uid);
+        if (!firestoreUser)
+          await addUser({
+            uid: firebaseUser.uid,
+            email: firebaseUser.email || "",
+            displayName: firebaseUser.displayName,
+            photoURL: firebaseUser.photoURL,
+          });
       },
       loginWithGoogle: async () => {
         const firebaseUser = await AuthService.googleLogin();
@@ -81,15 +89,16 @@ const useUser = create(
       },
       updateUser: async (user: Partial<IUser>) => {
         const newUser = await AuthService.updateUser(user);
-        if (newUser)
-          set({
-            user: {
-              uid: newUser.uid,
-              email: newUser.email || "",
-              displayName: newUser.displayName,
-              photoURL: newUser.photoURL,
-            },
-          });
+        if (newUser) {
+          const user = {
+            uid: newUser.uid,
+            email: newUser.email || "",
+            displayName: newUser.displayName,
+            photoURL: newUser.photoURL,
+          };
+          await addUser(user);
+          set({user});
+        }
       },
     }),
     {

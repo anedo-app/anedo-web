@@ -8,10 +8,15 @@ import PasswordField from "@/components/PasswordField";
 import useErrorMessages from "@/hooks/useErrorMessages";
 import useFormEmptyFields from "@/hooks/useFormEmptyFields";
 import {FirebaseError} from "firebase/app";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
   const {getErrorMessage} = useErrorMessages();
   const {login} = useUser();
+
+  const [params] = useSearchParams();
+  const redirect = params.get("redirect");
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,6 +38,7 @@ const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
     try {
       setLoading(true);
       await login(email, password);
+      if (redirect) navigate(redirect);
       setLoading(false);
     } catch (e) {
       if (e instanceof FirebaseError) setError(getErrorMessage(e));

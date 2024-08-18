@@ -14,11 +14,7 @@ import {
 const documentRef = (uid: string) => doc(db, "users", uid);
 
 export const addUser = async (user: IUser) => {
-  try {
-    await setDoc(documentRef(user.uid), user);
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
+  await setDoc(documentRef(user.uid), user);
 };
 
 export const updateUser = async (user: IUser) => {
