@@ -31,13 +31,16 @@ const shuffleMembersAnecdotes = (
     if (!randomItem) return undefined;
 
     referenceArray.splice(referenceArray.indexOf(randomItem), 1);
+    const anecdotes =
+      randomItem.anecdotes?.map(({id, value}) => ({
+        id,
+        value,
+      })) || [];
+
     return {
       guesserUid: member.uid,
       anecdotesOwnerUid: randomItem.uid,
-      anecdotes: randomItem.anecdotes?.map(({id, value}) => ({
-        id,
-        value,
-      })),
+      anecdotes: [...anecdotes]?.sort(() => Math.random() - 0.5),
     };
   });
   if (!shuffled.every((e) => e !== undefined))
