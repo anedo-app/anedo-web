@@ -22,7 +22,13 @@ const HomeModule: React.FC = () => {
   useEffect(() => {
     setPartyData("party", null);
 
-    listenParties((parties) => setAppData("parties", parties));
+    const unSubParties = listenParties((parties) =>
+      setAppData("parties", parties),
+    );
+
+    return () => {
+      if (unSubParties) unSubParties();
+    };
   }, []);
 
   return (
