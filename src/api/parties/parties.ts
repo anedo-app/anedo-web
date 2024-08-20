@@ -64,6 +64,12 @@ const addPartyMember = async (
   member: PartyMemberInterface,
   anecdotes: AnecdoteInterface[],
 ) => {
+  if (await isUserPartOfParty(partyId, member.uid)) return;
+
+  await updateDoc(doc(db, "parties", partyId), {
+    membersUid: arrayUnion(member.uid),
+  });
+
   await setDoc(doc(db, "parties", partyId, "anecdotes", member.uid), {
     uid: member.uid,
     anecdotes,
@@ -82,7 +88,7 @@ export const createParty = async (name: string): Promise<string | void> => {
       name,
       isStarted: false,
       isFinished: false,
-      membersUid: [ownerUid],
+      membersUid: [],
       ownerUid,
     };
     await setDoc(doc(db, "parties", id), party);
@@ -179,9 +185,7 @@ export const joinParty = async (partyId: string, pUserId?: string) => {
   try {
     const userId = pUserId || Auth.auth.currentUser?.uid;
     if (!userId) throw new Error("User not found");
-    await updateDoc(doc(db, "parties", partyId), {
-      membersUid: arrayUnion(userId),
-    });
+
     await addPartyMember(partyId, getNewPartyMember(userId), getNewAnecdotes());
   } catch (e) {
     console.error("Error updating document: ", e);
