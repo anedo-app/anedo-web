@@ -22,7 +22,7 @@ const Profile: React.FC = () => {
   );
 
   const hasChanges = useMemo(
-    () => name !== user?.displayName || image !== user?.photoURL,
+    () => name.trim() !== user?.displayName,
     [name, user],
   );
 
@@ -40,7 +40,7 @@ const Profile: React.FC = () => {
     }
     try {
       setLoading(true);
-      await updateUser({displayName: name});
+      await updateUser({displayName: name.trim()});
       toast.success("Profil mis à jour");
       setLoading(false);
     } catch (e) {
@@ -83,7 +83,7 @@ const Profile: React.FC = () => {
         icon={SaveIcon}
         onClick={onSave}
         loading={loading}
-        disabled={!hasChanges}
+        disabled={!hasChanges || !name.trim()}
       >
         Sauvegarder les modifications
       </Button>

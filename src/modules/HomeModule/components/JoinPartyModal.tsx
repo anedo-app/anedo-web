@@ -18,7 +18,7 @@ const JoinPartyModal: React.FC<{
   const joinNewParty = async () => {
     try {
       setLoading(true);
-      await joinParty(partyCode);
+      await joinParty(partyCode.trim());
       onJoin(partyCode);
       setLoading(false);
       onClose();
@@ -37,7 +37,7 @@ const JoinPartyModal: React.FC<{
       buttons={
         <Button
           icon={CheckmarkIcon}
-          disabled={!partyCode.length}
+          disabled={!partyCode.trim().length}
           onClick={joinNewParty}
           loading={loading}
         >

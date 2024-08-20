@@ -6,7 +6,7 @@ import {AnecdoteInterface} from "@/api/parties/types";
 
 const Anecdote: React.FC<{
   anecdote: AnecdoteInterface;
-  onSubmit?: (a: string) => void;
+  onSubmit?: () => void;
   className?: string;
   canEdit?: boolean;
 }> = ({anecdote, onSubmit, canEdit = true, className = ""}) => {

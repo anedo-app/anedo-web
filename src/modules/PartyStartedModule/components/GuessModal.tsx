@@ -47,7 +47,7 @@ const GuessModal: React.FC<{
 
   return (
     <Modal
-      title="Ton anecdote"
+      title="Devine qui c’est ?"
       onClose={onClose}
       isOpen={isOpen}
       className="flex flex-col gap-8"

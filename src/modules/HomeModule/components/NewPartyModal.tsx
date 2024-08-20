@@ -18,7 +18,7 @@ const NewPartyModal: React.FC<{
   const createNewParty = async () => {
     try {
       setLoading(true);
-      const partyId = await createParty(partyName);
+      const partyId = await createParty(partyName.trim());
       onCreate(partyId as string);
       setLoading(false);
       onClose();
@@ -38,7 +38,7 @@ const NewPartyModal: React.FC<{
       buttons={
         <Button
           icon={CheckmarkIcon}
-          disabled={!partyName.length}
+          disabled={!partyName.trim().length}
           onClick={createNewParty}
           loading={loading}
         >

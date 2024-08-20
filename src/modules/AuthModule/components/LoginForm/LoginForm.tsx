@@ -37,7 +37,7 @@ const LoginForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
     if (hasEmptyFields) return;
     try {
       setLoading(true);
-      await login(email, password);
+      await login(email.trim(), password);
       if (redirect) navigate(redirect);
       setLoading(false);
     } catch (e) {

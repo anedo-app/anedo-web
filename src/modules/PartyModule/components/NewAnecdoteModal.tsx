@@ -12,7 +12,7 @@ const NewAnecdoteModal: React.FC<{
   isOpen: boolean;
   anecdote: AnecdoteInterface;
   onClose: () => void;
-  onSubmit: (v: string) => void;
+  onSubmit: () => void;
 }> = ({isOpen, anecdote, onClose, onSubmit}) => {
   const {party, anecdotes} = useParty();
 
@@ -24,13 +24,13 @@ const NewAnecdoteModal: React.FC<{
       if (!party) return;
       setLoading(true);
       const userAnecdotes = anecdotes || [];
-      const newAnecdote = {...anecdote, value};
+      const newAnecdote = {...anecdote, value: value.trim()};
       const updatedAnecdotes = userAnecdotes.map((a) =>
         a.id === newAnecdote.id ? newAnecdote : a,
       );
       await addAnecdote(party.id, updatedAnecdotes);
       setLoading(false);
-      onSubmit(value);
+      onSubmit();
       onClose();
     } catch (e) {
       console.error(e);
@@ -47,7 +47,7 @@ const NewAnecdoteModal: React.FC<{
         <>
           <Button
             icon={CheckmarkIcon}
-            disabled={!value?.length}
+            disabled={!value?.trim().length}
             onClick={submitAnecdote}
             loading={loading}
           >

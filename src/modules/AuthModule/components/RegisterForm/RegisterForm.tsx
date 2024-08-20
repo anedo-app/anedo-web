@@ -53,7 +53,7 @@ const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
     if (!isFormValid) return;
     try {
       setLoading(true);
-      await register(email, password, name);
+      await register(email.trim(), password, name.trim());
       if (redirect) navigate(redirect);
 
       setLoading(false);
