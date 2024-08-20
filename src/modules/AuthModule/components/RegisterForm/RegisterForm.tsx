@@ -9,10 +9,15 @@ import useErrorMessages from "@/hooks/useErrorMessages";
 import React, {useEffect, useMemo, useState} from "react";
 import useFormEmptyFields from "@/hooks/useFormEmptyFields";
 import {FirebaseError} from "firebase/app";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
   const {register} = useUser();
   const {getErrorMessage} = useErrorMessages();
+
+  const [params] = useSearchParams();
+  const redirect = params.get("redirect");
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -49,6 +54,8 @@ const RegisterForm: React.FC<{onAuthSwitch: () => void}> = ({onAuthSwitch}) => {
     try {
       setLoading(true);
       await register(email, password, name);
+      if (redirect) navigate(redirect);
+
       setLoading(false);
     } catch (e) {
       if (e instanceof FirebaseError) setError(getErrorMessage(e));
