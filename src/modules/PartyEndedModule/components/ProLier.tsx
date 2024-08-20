@@ -23,7 +23,13 @@ const ProLier: React.FC<{members: FullPartyUserType[]}> = ({members}) => {
         <span className="h-px w-full bg-current" />
       </div>
       {rankedMembers.map((d, i) => (
-        <RankedPlayer member={d} rank={i + 2} key={d.uid} />
+        <RankedPlayer
+          member={d}
+          rank={i + notFoundMembers.length + 1}
+          key={d.uid}
+          highlight={i === 0}
+          info={i === 0 ? "A été démasqué en dernier" : ""}
+        />
       ))}
     </div>
   );

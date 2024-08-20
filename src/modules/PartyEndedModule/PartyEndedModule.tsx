@@ -9,19 +9,15 @@ import {StarIcon} from "@/Icons";
 const PartyEndedModule: React.FC = () => {
   const {members} = useParty();
 
-  const inspecteurs = members?.sort((a, b) => {
-    if (!a.guessedAt || !b.guessedAt) return 0;
-    if (a.guessedAt > b.guessedAt) return 1;
-    if (a.guessedAt < b.guessedAt) return -1;
-    return 0;
-  });
+  if (!members) return;
 
-  const liers = members?.sort((a, b) => {
-    if (!a.bustedAt || !b.bustedAt) return 0;
-    if (a.bustedAt > b.bustedAt) return 1;
-    if (a.bustedAt < b.bustedAt) return -1;
-    return 0;
-  });
+  const inspecteurs = [...members]?.sort((a, b) =>
+    !a?.guessedAt || !b?.guessedAt ? 0 : a?.guessedAt - b?.guessedAt,
+  );
+
+  const liers = [...members]?.sort((a, b) =>
+    !a?.bustedAt || !b?.bustedAt ? 0 : b?.bustedAt - a?.bustedAt,
+  );
 
   return (
     <>
