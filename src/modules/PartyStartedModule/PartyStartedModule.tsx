@@ -16,8 +16,9 @@ const PartyStartedModule: React.FC = () => {
 
   const onAnswer = (type: string) => {
     if (type === "too-early") setIsTooSoonModalOpen(true);
-    else if (type === "incorrect") setIsWrongAnswerModalOpen(true);
-    else setIsWrightAnswerModalOpen(true);
+    else if (type === "correct") {
+      setIsWrightAnswerModalOpen(true);
+    } else setIsWrongAnswerModalOpen(true);
   };
 
   if (userInfos?.guessed) return <UserGuessed />;

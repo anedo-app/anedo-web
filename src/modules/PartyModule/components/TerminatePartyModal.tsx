@@ -15,7 +15,7 @@ const TerminatePartyModal: React.FC<{
 
   const [loading, setLoading] = useState(false);
 
-  const onPartyDelete = async () => {
+  const onPartyTermination = async () => {
     try {
       setLoading(true);
       const party = getPartyData<IParty>("party");
@@ -27,6 +27,7 @@ const TerminatePartyModal: React.FC<{
       console.error(e);
     }
   };
+
   return (
     <Modal
       title="Terminer la partie ?"
@@ -40,7 +41,7 @@ const TerminatePartyModal: React.FC<{
             icon={ForbiddenIcon}
             variant="danger"
             loading={loading}
-            onClick={onPartyDelete}
+            onClick={onPartyTermination}
           >
             Oui je veux terminer la partie
           </Button>
