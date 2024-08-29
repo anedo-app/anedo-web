@@ -14,13 +14,13 @@ import {BookOpenIcon, RewindLeftIcon, UserIcon} from "@/Icons";
 const HomeModule: React.FC = () => {
   const navigate = useNavigate();
   const {setAppData, parties} = useApp();
-  const {setPartyData} = useParty();
+  const {resetPartyData} = useParty();
 
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
   useEffect(() => {
-    setPartyData("party", null);
+    resetPartyData();
 
     const unSubParties = listenParties((parties) =>
       setAppData("parties", parties),

@@ -28,6 +28,7 @@ type PartyStore = PartyStoreState & {
   };
   setPartyData: (key: Paths<PartyStoreState>, value: unknown) => void;
   getPartyData: <T>(key: Paths<PartyStoreState>) => T;
+  resetPartyData: () => void;
 };
 
 const useParty = create<PartyStore>((set, get) => ({
@@ -39,8 +40,13 @@ const useParty = create<PartyStore>((set, get) => ({
   computed: {
     isOwner: () => get().party?.ownerUid === useUser.getState().user?.uid,
   },
-  setPartyData: (key, value) => set({...lodashSet(get(), key, value)}),
+  setPartyData: (key, value) => {
+    if (key === "") return set({...(value as Partial<PartyStoreState>)});
+    set({...lodashSet(get(), key, value)});
+  },
   getPartyData: <T>(key: Paths<PartyStoreState>) => lodashGet(get(), key) as T,
+  resetPartyData: () =>
+    set({party: null, userInfos: null, anecdotes: null, members: null}),
 }));
 
 export default useParty;

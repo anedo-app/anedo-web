@@ -222,7 +222,7 @@ export const getUserPartyInfos = async (
 ): Promise<{
   anecdotes: AnecdoteInterface[];
   anecdotesToGuess: IAnecdoteToGuess[];
-  userInfo: PartyMemberInterface;
+  userInfos: PartyMemberInterface;
 }> => {
   const id = userUid || (Auth.auth.currentUser?.uid as string);
 
@@ -235,7 +235,7 @@ export const getUserPartyInfos = async (
   return {
     anecdotes: userAnecdotesSnap,
     anecdotesToGuess: anecdotesToGuess || null,
-    userInfo: userPartyInfoSnap.data() as PartyMemberInterface,
+    userInfos: userPartyInfoSnap.data() as PartyMemberInterface,
   };
 };
 

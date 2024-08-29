@@ -1,10 +1,8 @@
-import useUser from "@/hooks/useUser";
+import React, {useState} from "react";
 import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
 import NavBar from "@/components/NavBar";
-import Loader from "@/components/Loader";
 import Anecdote from "./components/Anecdote";
-import React, {useEffect, useState} from "react";
 import MembersList from "./components/MembersList";
 import StartButton from "./components/StartButton";
 import PartyEndedModule from "../PartyEndedModule";
@@ -14,120 +12,36 @@ import TerminatePartyButton from "./components/TerminatePartyButton";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
 import {toast} from "react-toastify";
 import {IParty} from "@/api/parties/types";
+import {useNavigate} from "react-router-dom";
+import {throwIfUndefined} from "@/types/utils";
 import {BookOpenIcon, ShareIcon} from "@/Icons";
-import {Navigate, useNavigate, useParams} from "react-router-dom";
-import {
-  getAllPartyMembers,
-  getAnecdotes,
-  getParty,
-  getUserPartyInfos,
-  isUserPartOfParty,
-  listenParty,
-  listenPartyMembers,
-  setPartyMemberInfos,
-} from "@/api/parties";
+import {useShallow} from "zustand/react/shallow";
+import {getAnecdotes, setPartyMemberInfos} from "@/api/parties";
 
 const PartyModule: React.FC = () => {
   const navigate = useNavigate();
-  const {partyId} = useParams();
-  const {user} = useUser();
-  const {party, anecdotes, userInfos, setPartyData} = useParty();
+  const {party, anecdotes, userInfos, setPartyData} = useParty(
+    useShallow((s) => ({
+      party: s.party,
+      anecdotes: s.anecdotes,
+      userInfos: s.userInfos,
+      setPartyData: s.setPartyData,
+    })),
+  );
 
-  const [loading, setLoading] = useState(false);
-  const [loadingUser, setLoadingUser] = useState(false);
+  throwIfUndefined<IParty>(party);
 
   const [partyStartedModalOpen, setPartyStartedModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (!partyId) return;
-
-    const unSubscribe = listenParty(partyId, (party) => {
-      setPartyData("party", party);
-      setPartyStartedModalOpen(party.isStarted && !userInfos?.startedPlaying);
-      fetchUserPartyInfos(party);
-      fetchMembers(party);
-    });
-
-    const unSubscribeMembers = listenPartyMembers(partyId, (members) => {
-      setPartyData("members", members);
-      if (party) fetchUserPartyInfos(party);
-    });
-
-    fetchAll();
-    return () => {
-      unSubscribe();
-      unSubscribeMembers();
-    };
-  }, []);
-
-  if (!partyId) return <Navigate to={"/"} replace />;
-
-  const fetchParty = async () => {
-    const partyData = await getParty(partyId);
-    setPartyData("party", partyData);
-    return partyData;
-  };
-
-  const fetchUserPartyInfos = async (party: IParty) => {
-    const id = party?.id || partyId;
-    if (!id) return;
-    const {userInfo, anecdotes, anecdotesToGuess} = await getUserPartyInfos(id);
-    setPartyData("userInfos", userInfo);
-    setPartyData("anecdotes", anecdotes);
-    setPartyData("anecdotesToGuess", anecdotesToGuess);
-    setPartyStartedModalOpen(
-      (party?.isStarted && !userInfo?.startedPlaying) || false,
-    );
-    setLoadingUser(false);
-  };
-
-  const fetchMembers = async (party?: IParty) => {
-    if (!party?.id) return;
-
-    const members = await getAllPartyMembers(party.id, party.membersUid);
-
-    setPartyData("members", members);
-  };
-
-  const fetchAll = async () => {
-    if (!party) setLoading(true);
-    try {
-      const isPartOfParty = await isUserPartOfParty(partyId, user?.uid || "");
-      if (!isPartOfParty) {
-        toast.error("Tu n'es pas membre de cette partie.");
-        return navigate("/");
-      }
-      const fetchedParty = await fetchParty();
-      await fetchUserPartyInfos(fetchedParty);
-      setLoading(false);
-
-      fetchMembers(fetchedParty);
-    } catch (e) {
-      console.error(e);
-      toast.error("Une erreur est survenue pour récupérer la partie.");
-      navigate("/");
-    }
-  };
-
   const onAnecdoteSubmit = async () => {
-    const anecdotes = await getAnecdotes(partyId);
+    const anecdotes = await getAnecdotes(party.id);
     setPartyData("anecdotes", anecdotes);
   };
 
   const copyShareLink = () => {
-    navigator.clipboard.writeText(
-      `${window.location.origin}/join/${party?.id}`,
-    );
-
+    navigator.clipboard.writeText(`${window.location.origin}/join/${party.id}`);
     toast.success("Lien copié dans le presse-papier");
   };
-
-  if (loading || party === null)
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <Loader />
-      </div>
-    );
 
   return (
     <div className="h-full flex flex-col justify-between gap-6">
@@ -151,25 +65,24 @@ const PartyModule: React.FC = () => {
         {!party.isStarted && <StartButton />}
 
         <div className="flex flex-col gap-4">
-          {!loadingUser &&
-            (party.isFinished ? (
-              <PartyEndedModule />
-            ) : party.isStarted ? (
-              <PartyStartedModule />
-            ) : (
-              <>
-                <h2 className="text-small-title">Tes anecdotes</h2>
-                <div className="flex flex-col gap-2">
-                  {anecdotes?.map((a, i) => (
-                    <Anecdote
-                      anecdote={a}
-                      key={a.type + i}
-                      onSubmit={onAnecdoteSubmit}
-                    />
-                  ))}
-                </div>
-              </>
-            ))}
+          {party.isFinished ? (
+            <PartyEndedModule />
+          ) : party.isStarted ? (
+            <PartyStartedModule />
+          ) : (
+            <>
+              <h2 className="text-small-title">Tes anecdotes</h2>
+              <div className="flex flex-col gap-2">
+                {anecdotes?.map((a, i) => (
+                  <Anecdote
+                    anecdote={a}
+                    key={a.type + i}
+                    onSubmit={onAnecdoteSubmit}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
       {!party.isFinished && (

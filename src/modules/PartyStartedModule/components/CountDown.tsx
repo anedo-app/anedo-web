@@ -1,33 +1,36 @@
-import useParty from "@/hooks/useParty";
 import InfoBox from "@/components/InfoBox";
 import React, {useEffect, useRef, useState} from "react";
 import {format} from "date-fns";
 import {FlagIcon, StarIcon} from "@/Icons";
 
-const CountDown: React.FC = () => {
-  const {userInfos} = useParty();
-
-  const nextTime = useRef<number>(userInfos?.nextGuessTime || 0);
+const CountDown: React.FC<{nextGuessTime: number | undefined}> = ({
+  nextGuessTime = 0,
+}) => {
   const [timer, setTimer] = useState(
-    nextTime.current ? nextTime.current - new Date().getTime() : 0,
+    nextGuessTime ? nextGuessTime - new Date().getTime() : 0,
   );
 
   const interval = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    if (interval.current === undefined)
+    if (interval.current === undefined && nextGuessTime) {
       interval.current = setInterval(() => {
-        setTimer(nextTime.current - new Date().getTime());
+        setTimer(nextGuessTime - new Date().getTime());
       }, 1000);
+    }
+
+    if (timer <= 0) {
+      clearInterval(interval.current);
+    }
 
     return () => {
-      if (timer <= 0) clearInterval(interval.current);
+      clearInterval(interval.current);
     };
-  }, [userInfos]);
+  }, [nextGuessTime]);
 
-  if (!nextTime.current) return null;
+  if (!nextGuessTime) return null;
 
-  if (nextTime.current - new Date().getTime() <= 0)
+  if (nextGuessTime - new Date().getTime() <= 0)
     return (
       <InfoBox
         variant="warning"
@@ -50,4 +53,6 @@ const CountDown: React.FC = () => {
   );
 };
 
-export default CountDown;
+const MemoCountDown = React.memo(CountDown);
+
+export default MemoCountDown;
