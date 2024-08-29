@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@/components/Button";
 import {ArrowRightIcon} from "@/Icons";
-import {IParty} from "@/api/parties/types";
+import {IParty, PartyStateEnum} from "@/api/parties/types";
 
 const PartyCard: React.FC<{party: IParty; onClick: () => void}> = ({
   party,
@@ -11,7 +11,7 @@ const PartyCard: React.FC<{party: IParty; onClick: () => void}> = ({
     <div className="flex justify-between items-center">
       <h3 className="font-bold">{party.name}</h3>
       <p className="text-purple-100 text-small-stuff">
-        {party.isStarted ? "Démarrée" : "En attente"}
+        {party.state === PartyStateEnum.PLAYING ? "Démarrée" : "En attente"}
       </p>
     </div>
     <div className="flex justify-between items-center">

@@ -5,13 +5,14 @@ import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
 import {EyeIcon} from "@/Icons";
 import {useNavigate} from "react-router-dom";
+import {PartyStateEnum} from "@/api/parties/types";
 
 const MembersList: React.FC = () => {
   const navigate = useNavigate();
   const {party, members} = useParty();
 
   const tagContent = () => {
-    if (party?.isStarted)
+    if (party?.state === PartyStateEnum.PLAYING)
       return members
         ? `${members.filter((m) => m.guessed).length} / ${members.length} trouvées`
         : "Calculs...";
@@ -27,7 +28,9 @@ const MembersList: React.FC = () => {
     <div className="flex flex-col font-bold gap-4">
       <div className="flex w-full justify-between items-center">
         <h3>
-          {party?.isStarted ? "Avancement de l’enquête" : "Liste des joueurs"}
+          {party?.state === PartyStateEnum.PLAYING
+            ? "Avancement de l’enquête"
+            : "Liste des joueurs"}
         </h3>
         <Tag text={tagContent()} />
       </div>

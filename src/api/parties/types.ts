@@ -27,8 +27,13 @@ export type FullPartyUserType = PartyMemberInterface & IUser;
 export type IParty = {
   id: string;
   name: string;
-  isStarted: boolean;
-  isFinished: boolean;
+  state: PartyStateEnum;
   membersUid: string[];
   ownerUid: string;
 };
+
+export enum PartyStateEnum {
+  WAITING = "waiting",
+  PLAYING = "playing",
+  FINISHED = "finished",
+}

@@ -3,6 +3,7 @@ import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
 import TerminatePartyModal from "./TerminatePartyModal";
 import {ForbiddenIcon} from "@/Icons";
+import {PartyStateEnum} from "@/api/parties/types";
 
 const TerminatePartyButton: React.FC = () => {
   const isOwner = useParty((s) => s.computed.isOwner);
@@ -11,7 +12,7 @@ const TerminatePartyButton: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (!computedIsOwner || !party?.isStarted) return null;
+  if (!computedIsOwner || party?.state !== PartyStateEnum.PLAYING) return null;
 
   return (
     <>

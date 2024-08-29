@@ -9,6 +9,7 @@ import NewPartyModal from "./components/NewPartyModal";
 import JoinPartyModal from "./components/JoinPartyModal";
 import {listenParties} from "@/api/parties";
 import {useNavigate} from "react-router-dom";
+import {PartyStateEnum} from "@/api/parties/types";
 import {BookOpenIcon, RewindLeftIcon, UserIcon} from "@/Icons";
 
 const HomeModule: React.FC = () => {
@@ -22,8 +23,12 @@ const HomeModule: React.FC = () => {
   useEffect(() => {
     resetPartyData();
 
-    const unSubParties = listenParties((parties) =>
-      setAppData("parties", parties),
+    const unSubParties = listenParties(
+      [
+        ["state", "==", PartyStateEnum.WAITING],
+        ["state", "==", PartyStateEnum.PLAYING],
+      ],
+      (parties) => setAppData("parties", parties),
     );
 
     return () => {
@@ -64,7 +69,7 @@ const HomeModule: React.FC = () => {
         </div>
       )}
       <div className="flex w-full justify-between">
-        <Button icon={RewindLeftIcon} disabled>
+        <Button icon={RewindLeftIcon} onClick={() => navigate(`/archives`)}>
           Archives
         </Button>
         <Button icon={BookOpenIcon} onClick={() => navigate("/rules")}>

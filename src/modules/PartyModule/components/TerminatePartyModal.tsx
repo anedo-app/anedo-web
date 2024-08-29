@@ -4,7 +4,7 @@ import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
 import {ForbiddenIcon} from "@/Icons";
 import {updateParty} from "@/api/parties";
-import {IParty} from "@/api/parties/types";
+import {IParty, PartyStateEnum} from "@/api/parties/types";
 
 const TerminatePartyModal: React.FC<{
   isOpen: boolean;
@@ -19,7 +19,7 @@ const TerminatePartyModal: React.FC<{
     try {
       setLoading(true);
       const party = getPartyData<IParty>("party");
-      await updateParty({...party, isFinished: true});
+      await updateParty({...party, state: PartyStateEnum.FINISHED});
       onTerminate();
       setLoading(false);
     } catch (e) {

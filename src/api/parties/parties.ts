@@ -11,21 +11,24 @@ import {
   IAnecdoteToGuess,
   IParty,
   PartyMemberInterface,
+  PartyStateEnum,
 } from "./types";
 import {
+  and,
   arrayRemove,
   arrayUnion,
   collection,
   deleteDoc,
   doc,
-  DocumentData,
   getDoc,
   getDocs,
   onSnapshot,
+  or,
   query,
   setDoc,
   updateDoc,
   where,
+  WhereFilterOp,
 } from "firebase/firestore";
 
 const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -86,8 +89,7 @@ export const createParty = async (name: string): Promise<string | void> => {
     const party: Omit<IParty, "members"> = {
       id,
       name,
-      isStarted: false,
-      isFinished: false,
+      state: PartyStateEnum.WAITING,
       membersUid: [],
       ownerUid,
     };
@@ -114,35 +116,48 @@ export const getParty = async (uid: string): Promise<IParty> => {
   }
 };
 
-export const getParties = async (uid?: string): Promise<DocumentData[]> => {
+export const getParties = async (
+  params: [string, WhereFilterOp, string][] = [],
+  uid?: string,
+): Promise<IParty[]> => {
   const userUid = uid || Auth.auth.currentUser?.uid;
 
   if (!userUid) return [];
 
+  const filterParams = [
+    where("membersUid", "array-contains", userUid),
+    or(...params.map(([key, operator, value]) => where(key, operator, value))),
+  ];
+
   const q = query(
     collection(db, "parties"),
-    where("membersUid", "array-contains", uid),
+    and(...filterParams.filter((f) => f)),
   );
-  const querySnapshot = await getDocs(q);
-  const docs: DocumentData[] = [];
 
-  if (!querySnapshot.empty) {
-    querySnapshot.forEach((doc) => {
-      docs.push(doc.data());
-    });
-    return docs;
-  } else {
-    return docs;
-  }
+  const querySnapshot = await getDocs(q);
+  const parties: IParty[] = [];
+  querySnapshot.forEach((doc) => {
+    parties.push(doc.data() as IParty);
+  });
+
+  return parties;
 };
 
-export const listenParties = (callback: (parties: IParty[]) => void) => {
+export const listenParties = (
+  params: [string, WhereFilterOp, string][],
+  callback: (parties: IParty[]) => void,
+) => {
   const userId = Auth.auth.currentUser?.uid;
   if (!userId) return;
 
+  const filterParams = [
+    where("membersUid", "array-contains", userId),
+    or(...params.map(([key, operator, value]) => where(key, operator, value))),
+  ];
+
   const q = query(
     collection(db, "parties"),
-    where("membersUid", "array-contains", userId),
+    and(...filterParams.filter((f) => f)),
   );
 
   return onSnapshot(q, (querySnapshot) => {
@@ -213,7 +228,7 @@ export const startParty = async (partyId: string) => {
     "https://shuffleanecdotes-dgp2elftrq-uc.a.run.app?partyId=" + partyId,
   );
   await shuffleAnecdotes({partyId});
-  await updateDoc(doc(db, "parties", partyId), {isStarted: true});
+  await updateDoc(doc(db, "parties", partyId), {state: PartyStateEnum.PLAYING});
 };
 
 export const getUserPartyInfos = async (

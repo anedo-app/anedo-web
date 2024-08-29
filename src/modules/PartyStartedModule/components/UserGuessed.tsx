@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import EndIllustration from "../assets/END.png";
 import {toast} from "react-toastify";
 import {updateParty} from "@/api/parties";
-import {IParty} from "@/api/parties/types";
+import {IParty, PartyStateEnum} from "@/api/parties/types";
 
 const UserGuessed: React.FC = () => {
   const {userInfos, members, getPartyData} = useParty();
@@ -16,7 +16,7 @@ const UserGuessed: React.FC = () => {
     try {
       setLoading(true);
       const party = getPartyData<IParty>("party");
-      await updateParty({...party, isFinished: true});
+      await updateParty({...party, state: PartyStateEnum.FINISHED});
       setLoading(false);
     } catch (e) {
       toast.error("Une erreur est survenue");

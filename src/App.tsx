@@ -8,6 +8,7 @@ import Party from "./pages/Party";
 import useEnv from "./hooks/useEnv";
 import useUser from "./hooks/useUser";
 import Profile from "./pages/Profile";
+import Archives from "./pages/Archives";
 import Layout from "@/components/Layout";
 import MembersList from "./pages/MembersList";
 import WaitingScreen from "./pages/WaitingScreen";
@@ -58,6 +59,7 @@ const AppRouter = () => {
                 <Route index element={<Home />} />
                 <Route path="/rules" element={<Rules />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/archives" element={<Archives />} />
                 <Route path="/party/:partyId" element={<Party />} />
                 <Route path="/members-list" element={<MembersList />} />
                 <Route path="/waiting" element={<WaitingScreen />} />

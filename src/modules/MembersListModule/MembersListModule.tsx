@@ -4,6 +4,7 @@ import useUser from "@/hooks/useUser";
 import useParty from "@/hooks/useParty";
 import NavBar from "@/components/NavBar";
 import Member from "./components/Member";
+import {PartyStateEnum} from "@/api/parties/types";
 
 const MembersListModule: React.FC = () => {
   const {members, computed, party} = useParty();
@@ -13,7 +14,8 @@ const MembersListModule: React.FC = () => {
   const [filter, setFilter] = useState("all");
 
   const filteredMembers = members?.filter((member) => {
-    if (filter === "all" || party?.isStarted) return true;
+    if (filter === "all" || party?.state === PartyStateEnum.PLAYING)
+      return true;
     if (filter === "ready") return member.isReady;
     if (filter === "waiting") return !member.isReady;
     return true;
@@ -22,7 +24,7 @@ const MembersListModule: React.FC = () => {
   return (
     <div className="flex flex-col gap-8 h-full">
       <NavBar leftAction="back" name="Les joueurs" />
-      {!party?.isStarted && (
+      {party?.state !== PartyStateEnum.PLAYING && (
         <Tabs
           onChange={setFilter}
           className="w-full"
@@ -48,7 +50,7 @@ const MembersListModule: React.FC = () => {
             member={member}
             isOwner={isOwner}
             isCurrentUser={member.uid === user?.uid}
-            isPartyStarted={party?.isStarted}
+            isPartyStarted={party?.state === PartyStateEnum.PLAYING}
           />
         ))}
       </div>
