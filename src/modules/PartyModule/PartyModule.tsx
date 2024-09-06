@@ -1,12 +1,12 @@
-import React, {useState} from "react";
 import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
 import NavBar from "@/components/NavBar";
-import Anecdote from "./components/Anecdote";
+import React, {useSyncExternalStore} from "react";
 import MembersList from "./components/MembersList";
 import StartButton from "./components/StartButton";
 import PartyEndedModule from "../PartyEndedModule";
 import PartyStartedModule from "../PartyStartedModule";
+import PartyWaitingModule from "../PartyWaitingModule";
 import PartyStartedModal from "./components/PartyStartedModal";
 import TerminatePartyButton from "./components/TerminatePartyButton";
 import QuiteLeavePartyButton from "./components/QuiteLeavePartyButton";
@@ -15,28 +15,35 @@ import {useNavigate} from "react-router-dom";
 import {throwIfUndefined} from "@/types/utils";
 import {BookOpenIcon, ShareIcon} from "@/Icons";
 import {useShallow} from "zustand/react/shallow";
+import {setPartyMemberInfos} from "@/api/parties";
 import {IParty, PartyStateEnum} from "@/api/parties/types";
-import {getAnecdotes, setPartyMemberInfos} from "@/api/parties";
 
 const PartyModule: React.FC = () => {
   const navigate = useNavigate();
-  const {party, anecdotes, userInfos, setPartyData} = useParty(
+
+  const {
+    party,
+    userInfos,
+    getPartyData,
+    subscribeMembers,
+    subscribeParty,
+    subscribeCurrentUser,
+  } = useParty(
     useShallow((s) => ({
       party: s.party,
-      anecdotes: s.anecdotes,
       userInfos: s.userInfos,
-      setPartyData: s.setPartyData,
+      getPartyData: s.getPartyData,
+      subscribeMembers: s.subscribeMembers,
+      subscribeParty: s.subscribeParty,
+      subscribeCurrentUser: s.subscribeCurrentUser,
     })),
   );
 
   throwIfUndefined<IParty>(party);
 
-  const [partyStartedModalOpen, setPartyStartedModalOpen] = useState(false);
-
-  const onAnecdoteSubmit = async () => {
-    const anecdotes = await getAnecdotes(party.id);
-    setPartyData("anecdotes", anecdotes);
-  };
+  useSyncExternalStore(subscribeMembers, () => getPartyData("members"));
+  useSyncExternalStore(subscribeParty, () => getPartyData("party"));
+  useSyncExternalStore(subscribeCurrentUser, () => getPartyData("userData"));
 
   const copyShareLink = () => {
     navigator.clipboard.writeText(`${window.location.origin}/join/${party.id}`);
@@ -51,6 +58,7 @@ const PartyModule: React.FC = () => {
           <Button icon={BookOpenIcon} onClick={() => navigate("/rules")} />
         }
       />
+
       <div className="grow flex-col flex gap-8">
         <div className="flex flex-col gap-2">
           <h1 className="text-title text-center">{party.name}</h1>
@@ -61,6 +69,7 @@ const PartyModule: React.FC = () => {
             </div>
           )}
         </div>
+
         {party.state !== PartyStateEnum.FINISHED && <MembersList />}
         {party.state === PartyStateEnum.WAITING && <StartButton />}
 
@@ -70,21 +79,11 @@ const PartyModule: React.FC = () => {
           ) : party.state === PartyStateEnum.PLAYING ? (
             <PartyStartedModule />
           ) : (
-            <>
-              <h2 className="text-small-title">Tes anecdotes</h2>
-              <div className="flex flex-col gap-2">
-                {anecdotes?.map((a, i) => (
-                  <Anecdote
-                    anecdote={a}
-                    key={a.type + i}
-                    onSubmit={onAnecdoteSubmit}
-                  />
-                ))}
-              </div>
-            </>
+            <PartyWaitingModule partyId={party.id} />
           )}
         </div>
       </div>
+
       {party.state !== PartyStateEnum.FINISHED && (
         <div className="flex gap-2 justify-center">
           <TerminatePartyButton />
@@ -92,14 +91,15 @@ const PartyModule: React.FC = () => {
         </div>
       )}
 
-      {partyStartedModalOpen && (
+      {!userInfos?.startedPlaying && party.state === PartyStateEnum.PLAYING && (
         <PartyStartedModal
-          isOpen={partyStartedModalOpen}
+          isOpen={
+            !userInfos?.startedPlaying && party.state === PartyStateEnum.PLAYING
+          }
           onClose={() => {
             setPartyMemberInfos(party.id, userInfos?.uid || "", {
               startedPlaying: true,
             });
-            setPartyStartedModalOpen(false);
           }}
         />
       )}

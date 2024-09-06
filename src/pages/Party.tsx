@@ -1,66 +1,58 @@
 import "../App.scss";
 import useUser from "@/hooks/useUser";
+import React, {Suspense} from "react";
 import useParty from "@/hooks/useParty";
 import Loader from "@/components/Loader";
 import PartyModule from "@/modules/PartyModule";
-import React, {useEffect, useRef, useState} from "react";
 import {toast} from "react-toastify";
 import {IParty} from "@/api/parties/types";
 import {useShallow} from "zustand/react/shallow";
-import {useNavigate, useParams} from "react-router-dom";
+import {Navigate, useParams} from "react-router-dom";
 import {
   getAllPartyMembers,
   getParty,
   getUserPartyInfos,
   isUserPartOfParty,
-  listenParty,
-  listenPartyMembers,
 } from "@/api/parties";
 
-const Party: React.FC = () => {
-  const navigate = useNavigate();
+let promise: Promise<void> | undefined;
+let fetched: boolean;
+let error: boolean;
+
+const PartySuspense: React.FC = () => {
   const {partyId} = useParams();
 
-  const {user} = useUser(useShallow((s) => ({user: s.user})));
-  const {setPartyData, getPartyData} = useParty(
-    useShallow((s) => ({
-      setPartyData: s.setPartyData,
-      getPartyData: s.getPartyData,
-    })),
-  );
+  const user = useUser(useShallow((s) => s.user));
+  const setPartyData = useParty(useShallow((s) => s.setPartyData));
 
-  const storedParty = getPartyData<IParty | undefined>("party");
-  const [loading, setLoading] = useState(!storedParty);
-  const firstLand = useRef(true);
+  if (error) return <Navigate to="/" replace />;
+  if (fetched) return <PartyModule />;
+  if (promise) throw promise;
 
   const fetchUserPartyInfos = async (party: IParty) => {
     const id = party?.id || partyId;
     if (!id) return;
-
     return await getUserPartyInfos(id);
-  };
-
-  const fetchMembers = async (party: IParty) => {
-    if (!party?.id) return;
-
-    const members = await getAllPartyMembers(party.id, party.membersUid);
-
-    setPartyData("members", members);
   };
 
   const checkUserPartOfParty = async (partyId: string) => {
     const isPartOfParty = await isUserPartOfParty(partyId, user?.uid || "");
     if (!isPartOfParty) {
       toast.error("Tu n'es pas membre de cette partie.");
-      navigate("/");
       return true;
     }
   };
 
-  const prepareParty = async (partyId: string) => {
+  const prepareParty = async (partyId: string | undefined) => {
     try {
-      if (await checkUserPartOfParty(partyId)) return;
-
+      if (!partyId) {
+        error = true;
+        return;
+      }
+      if (await checkUserPartOfParty(partyId)) {
+        error = true;
+        return;
+      }
       const partyData = await getParty(partyId);
       const userPartyInfos = await fetchUserPartyInfos(partyData);
       const members = await getAllPartyMembers(
@@ -69,71 +61,41 @@ const Party: React.FC = () => {
       );
 
       setPartyData("", {party: partyData, members, ...userPartyInfos});
-      setLoading(false);
-      firstLand.current = false;
-
-      const unSubscribe = listenParty(partyId, async (party) => {
-        if (firstLand.current) return;
-
-        const userPartyInfos = await fetchUserPartyInfos(party);
-
-        setPartyData("", {party: party, ...userPartyInfos});
-        await fetchMembers(party);
-      });
-
-      const unSubscribeMembers = listenPartyMembers(partyId, (members) => {
-        if (firstLand.current) return;
-
-        setPartyData("members", members);
-        if (storedParty) fetchUserPartyInfos(storedParty);
-      });
-
-      return () => {
-        unSubscribe();
-        unSubscribeMembers();
-      };
+      fetched = true;
     } catch (e) {
       console.error(e);
       toast.error("Une erreur est survenue pour récupérer la partie.");
-      navigate("/");
+      error = true;
     }
   };
 
-  useEffect(() => {
-    if (!partyId) return navigate("/");
+  promise = prepareParty(partyId);
 
-    prepareParty(partyId);
-
-    const unSubscribe = listenParty(partyId, async (party) => {
-      if (firstLand.current) return;
-
-      const userPartyInfos = await fetchUserPartyInfos(party);
-
-      setPartyData("", {party: party, ...userPartyInfos});
-      await fetchMembers(party);
-    });
-
-    const unSubscribeMembers = listenPartyMembers(partyId, (members) => {
-      if (firstLand.current) return;
-
-      setPartyData("members", members);
-      if (storedParty) fetchUserPartyInfos(storedParty);
-    });
-
-    return () => {
-      unSubscribe();
-      unSubscribeMembers();
-    };
-  }, []);
-
-  if (loading || storedParty === null)
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <Loader />
-      </div>
-    );
-
-  return <PartyModule />;
+  throw promise;
 };
 
-export default Party;
+const PartyPage: React.FC = () => {
+  const getPartyData = useParty(useShallow((s) => s.getPartyData));
+  const storedParty = getPartyData<IParty | undefined>("party");
+
+  if (!storedParty) {
+    promise = undefined;
+    fetched = false;
+  }
+
+  error = false;
+
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full h-full flex items-center justify-center">
+          <Loader />
+        </div>
+      }
+    >
+      <PartySuspense />
+    </Suspense>
+  );
+};
+
+export default PartyPage;

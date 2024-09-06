@@ -63,6 +63,7 @@ const AppRouter = () => {
                 <Route path="/party/:partyId" element={<Party />} />
                 <Route path="/members-list" element={<MembersList />} />
                 <Route path="/waiting" element={<WaitingScreen />} />
+                <Route path="/*" element={<Navigate to="/" replace />} />
               </Routes>
             </ProtectedRoute>
           }

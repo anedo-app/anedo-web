@@ -2,6 +2,13 @@ import useUser from "./useUser";
 import lodashSet from "lodash/set";
 import lodashGet from "lodash/get";
 import {create} from "zustand";
+import {Unsubscribe} from "firebase/firestore";
+import {throwIfUndefined} from "@/types/utils";
+import {
+  listenCurrentUser,
+  listenParty,
+  listenPartyMembers,
+} from "@/api/parties";
 import {
   AnecdoteInterface,
   FullPartyUserType,
@@ -29,6 +36,9 @@ type PartyStore = PartyStoreState & {
   setPartyData: (key: Paths<PartyStoreState>, value: unknown) => void;
   getPartyData: <T>(key: Paths<PartyStoreState>) => T;
   resetPartyData: () => void;
+  subscribeMembers: () => Unsubscribe;
+  subscribeParty: () => Unsubscribe;
+  subscribeCurrentUser: () => Unsubscribe;
 };
 
 const useParty = create<PartyStore>((set, get) => ({
@@ -47,6 +57,27 @@ const useParty = create<PartyStore>((set, get) => ({
   getPartyData: <T>(key: Paths<PartyStoreState>) => lodashGet(get(), key) as T,
   resetPartyData: () =>
     set({party: null, userInfos: null, anecdotes: null, members: null}),
+  subscribeMembers: () => {
+    const party = get().party;
+    throwIfUndefined<IParty>(party);
+    return listenPartyMembers(party.id, (members) => {
+      set({members});
+    });
+  },
+  subscribeParty: () => {
+    const party = get().party;
+    throwIfUndefined<IParty>(party);
+    return listenParty(party.id, (party) => {
+      set({party});
+    });
+  },
+  subscribeCurrentUser: () => {
+    const party = get().party;
+    throwIfUndefined<IParty>(party);
+    return listenCurrentUser(party.id, (userInfos) => {
+      set({userInfos});
+    });
+  },
 }));
 
 export default useParty;

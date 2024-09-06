@@ -4,7 +4,7 @@ import Modal from "@/components/Modal";
 import useParty from "@/hooks/useParty";
 import Button from "@/components/Button";
 import Avatar from "@/components/Avatar";
-import Anecdote from "@/modules/PartyModule/components/Anecdote";
+import Anecdote from "@/components/Anecdote";
 import {toast} from "react-toastify";
 import {makeAGuess} from "@/api/parties";
 import {IAnecdoteToGuess} from "@/api/parties/types";

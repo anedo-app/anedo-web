@@ -13,14 +13,13 @@ const CountDown: React.FC<{nextGuessTime: number | undefined}> = ({
   const interval = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    if (interval.current === undefined && nextGuessTime) {
+    if (nextGuessTime - new Date().getTime() > 0) {
       interval.current = setInterval(() => {
         setTimer(nextGuessTime - new Date().getTime());
       }, 1000);
-    }
-
-    if (timer <= 0) {
+    } else {
       clearInterval(interval.current);
+      setTimer(0);
     }
 
     return () => {

@@ -254,6 +254,24 @@ export const getUserPartyInfos = async (
   };
 };
 
+export const listenCurrentUser = (
+  partyUid: string,
+  callback: (user: PartyMemberInterface) => void,
+) =>
+  onSnapshot(
+    doc(
+      db,
+      "parties",
+      partyUid,
+      "members",
+      Auth.auth.currentUser?.uid as string,
+    ),
+    (querySnapshot) => {
+      if (querySnapshot.exists())
+        callback(querySnapshot.data() as PartyMemberInterface);
+    },
+  );
+
 export const getAnecdotes = async (partyId: string, uid?: string) => {
   const userId = uid || Auth.auth.currentUser?.uid;
   if (!userId) throw new Error("User not found");
